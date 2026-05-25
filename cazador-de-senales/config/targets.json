@@ -1,0 +1,14 @@
+[
+  {
+    "city": "Ciudad de Panamá",
+    "country": "PA",
+    "categories": [
+      "med spa",
+      "clínica estética",
+      "dentista",
+      "restaurante",
+      "hotel boutique"
+    ],
+    "maxResultsPerCategory": 20
+  }
+]

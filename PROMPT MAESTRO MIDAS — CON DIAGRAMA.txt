@@ -1,0 +1,202 @@
+PROMPT MAESTRO MIDAS — CON DIAGRAMA INCLUIDO
+Actúa como Arquitecto Técnico Senior. Necesito que diseñes la arquitectura completa de una aplicación llamada “Cazador de Señales”, basada en la lógica de La Chispa (Cortexia 777).
+
+Contexto estratégico:
+- Semana 5 de Ingeniería Agéntica: necesito producir una pieza real, imperfecta pero publicada.
+- Esta arquitectura será mi pieza técnica de la semana.
+- El sistema debe detectar “heridas frescas” en negocios locales y generar oportunidades listas para contactar.
+- La app debe ser modular, escalable y construible con Claude Code.
+
+Objetivo del entregable:
+Diseñar la arquitectura completa del MVP que:
+1. Detecta señales públicas (reseñas negativas, cambios web, stack tecnológico, vacantes).
+2. Analiza cada señal con IA.
+3. Asigna un puntaje (scoring 0–100).
+4. Genera un mensaje de outreach personalizado.
+5. Guarda todo en Supabase.
+6. Muestra un dashboard simple para revisar señales y aprobar mensajes.
+
+Quiero que definas con precisión:
+
+────────────────────────────────────────
+1. ARQUITECTURA GENERAL
+────────────────────────────────────────
+Incluye un diagrama ASCII del flujo completo:
+
+- Entrada → Scrapers → Normalización → DB → IA análisis → IA mensajes → Scoring → Señales → Dashboard → Email (borrador/autopiloto)
+
+El diagrama debe mostrar:
+- Módulos
+- Flujo de datos
+- Dependencias
+- Cron jobs
+
+────────────────────────────────────────
+2. STACK RECOMENDADO
+────────────────────────────────────────
+Backend: Node.js + TypeScript  
+Scraping: Apify, SerpApi, BuiltWith, Wappalyzer  
+Base de datos: Supabase  
+IA: Claude / OpenAI  
+Email: Resend  
+Cron: GitHub Actions o Supabase Edge Functions  
+Dashboard: Next.js  
+
+Explica por qué cada herramienta es la mejor opción para este MVP.
+
+────────────────────────────────────────
+3. ESTRUCTURA DEL PROYECTO
+────────────────────────────────────────
+Define carpetas y archivos:
+
+/src  
+  /apify  
+  /scrapers  
+  /ai  
+  /signals  
+  /email  
+  /jobs  
+  /db  
+/dashboard  
+/config  
+.env.example  
+
+Incluye:
+- Responsabilidad de cada módulo
+- Convenciones de nombres
+- Variables de entorno necesarias
+
+────────────────────────────────────────
+4. BASE DE DATOS (SUPABASE)
+────────────────────────────────────────
+Define tablas completas:
+
+- companies  
+- reviews  
+- signals  
+- outreach_messages  
+
+Incluye:
+- Campos
+- Relaciones
+- Índices
+- Reglas para evitar duplicados
+- Ejemplos de queries típicas
+
+────────────────────────────────────────
+5. SCRAPERS
+────────────────────────────────────────
+Define qué datos devuelve cada scraper:
+
+A. Google Maps reviews  
+B. Cambios en sitios web  
+C. Stack tecnológico  
+D. Vacantes  
+
+Incluye:
+- Campos mínimos
+- Frecuencia recomendada
+- Riesgos y mitigaciones
+
+────────────────────────────────────────
+6. MOTOR DE IA
+────────────────────────────────────────
+Define prompts para:
+
+A. Analizar reseñas  
+B. Detectar dolor  
+C. Generar resumen de señal  
+D. Generar email personalizado  
+
+Incluye:
+- Validación de JSON
+- Reglas estrictas (no inventar, no prometer, tono consultivo)
+
+────────────────────────────────────────
+7. SISTEMA DE SCORING
+────────────────────────────────────────
+Define reglas simples:
+
++30 reseña 1–2 estrellas  
++20 dos reseñas negativas en 7 días  
++20 menciones de mala atención / no contestan  
++10 negocio con más de 50 reseñas  
++10 rating general > 4.0  
++10 tiene web o email  
+
+-30 ya contactado  
+-20 sin contacto claro  
+-20 reseña vaga o falsa  
+
+Define:
+- Fórmula final
+- Umbrales (contactar / revisar / descartar)
+
+────────────────────────────────────────
+8. WORKFLOW COMPLETO
+────────────────────────────────────────
+Define el flujo:
+
+1. Leer targets  
+2. Scraping  
+3. Guardar companies + reviews  
+4. Analizar reviews nuevas  
+5. Crear señales  
+6. Scoring  
+7. Generar email (borrador)  
+8. Autopiloto (si score > 85)  
+9. Dashboard  
+
+Incluye:
+- Logs
+- Manejo de errores
+- Reintentos
+
+────────────────────────────────────────
+9. DASHBOARD
+────────────────────────────────────────
+Define páginas:
+
+/signals  
+/companies/[id]  
+/outreach  
+
+Incluye:
+- Filtros
+- Estados
+- Botones de aprobar/descartar
+- Métricas clave
+
+────────────────────────────────────────
+10. ROADMAP DE 14 DÍAS
+────────────────────────────────────────
+Día 1–2: estructura + DB  
+Día 3–5: scrapers  
+Día 6–8: IA análisis + señales  
+Día 9–10: emails + autopiloto  
+Día 11–12: dashboard  
+Día 13–14: pruebas + primera señal real  
+
+────────────────────────────────────────
+11. RIESGOS Y MITIGACIONES
+────────────────────────────────────────
+Incluye:
+- Scraping fallido
+- JSON inválido
+- Señales duplicadas
+- Emails demasiado agresivos
+- Quemar dominio
+
+────────────────────────────────────────
+12. ENTREGA FINAL
+────────────────────────────────────────
+Quiero:
+
+- Arquitectura completa
+- Diagrama ASCII
+- Explicación de cada módulo
+- Roadmap de 14 días
+- Recomendaciones de escalabilidad
+- Lista de prompts técnicos para construir cada módulo
+
+No generes código todavía. Solo arquitectura, diseño y plan de ejecución.

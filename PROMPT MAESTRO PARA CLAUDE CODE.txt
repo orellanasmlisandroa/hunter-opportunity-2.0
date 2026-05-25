@@ -1,0 +1,85 @@
+PROMPT MAESTRO PARA CLAUDE CODE
+Quiero que actúes como Arquitecto Técnico Senior y me ayudes a diseñar la arquitectura completa de una aplicación llamada “Cazador de Señales”.
+
+Contexto estratégico:
+- El sistema sigue la lógica del Radar de Señales descrito en La Chispa (Cortexia 777).
+- La app debe detectar “heridas frescas” en negocios locales: reseñas negativas, cambios en webs, nuevas herramientas instaladas, vacantes, señales sociales.
+- La prioridad es construir un MVP funcional, no un producto final.
+- Semana 5: necesito producir una pieza real. Esta arquitectura será la base de esa pieza.
+
+Objetivo:
+Diseñar la arquitectura técnica completa del MVP que:
+1. Detecta señales públicas (Google Maps, cambios web, stack tecnológico, vacantes).
+2. Analiza cada señal con IA.
+3. Asigna un puntaje (scoring).
+4. Genera un mensaje de outreach personalizado.
+5. Guarda todo en una base de datos.
+6. Muestra un dashboard simple para revisar señales y aprobar mensajes.
+
+Quiero que definas con precisión:
+
+1. **Arquitectura general**
+   - Diagrama lógico de módulos.
+   - Flujo completo: scraping → análisis → scoring → generación de mensaje → dashboard.
+
+2. **Stack recomendado**
+   - Backend (Node.js + TypeScript).
+   - Scraping (Apify, SerpApi, BuiltWith, Wappalyzer).
+   - Base de datos (Supabase).
+   - IA (Claude / OpenAI).
+   - Email (Resend).
+   - Cron jobs (GitHub Actions o Supabase Edge Functions).
+   - Dashboard (Next.js).
+
+3. **Estructura del proyecto**
+   - Carpetas y archivos.
+   - Módulos independientes (scraping, análisis, señales, scoring, email, dashboard).
+   - Variables de entorno necesarias.
+
+4. **Base de datos**
+   - Tablas: companies, reviews, signals, outreach_messages.
+   - Índices y relaciones.
+   - Reglas para evitar duplicados.
+
+5. **Scrapers**
+   - Google Maps reviews.
+   - Cambios en sitios web.
+   - Stack tecnológico.
+   - Vacantes.
+   - Qué datos devuelve cada scraper.
+
+6. **Motor de IA**
+   - Prompt para analizar reseñas.
+   - Prompt para generar mensajes de outreach.
+   - Validación de JSON.
+
+7. **Sistema de scoring**
+   - Reglas simples (como en La Chispa).
+   - Fórmula final 0–100.
+   - Umbrales: contactar / revisar / descartar.
+
+8. **Workflow completo**
+   - Cómo corre cada hora.
+   - Cómo se procesan señales nuevas.
+   - Cómo se generan borradores de emails.
+   - Cómo se activa el autopiloto (solo si score > 85).
+
+9. **Dashboard**
+   - /signals
+   - /companies/[id]
+   - /outreach
+   - Filtros, botones, estados.
+
+10. **Plan de construcción**
+    - Qué construir primero (Semana 5).
+    - Qué construir después (Semana 6–8).
+    - Qué NO construir todavía.
+
+Entrega:
+- Dame la arquitectura completa.
+- Dame un diagrama textual del flujo.
+- Dame un roadmap de 14 días para construirlo.
+- Dame los riesgos y cómo mitigarlos.
+- Dame recomendaciones para mantener el sistema modular y escalable.
+
+No generes código todavía. Solo arquitectura, diseño y plan de ejecución.

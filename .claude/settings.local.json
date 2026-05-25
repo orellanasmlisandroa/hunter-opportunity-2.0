@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install *)",
+      "Bash(npx ts-node *)",
+      "PowerShell(Get-Process | Where-Object { $_.Id -eq 25208 } | Select-Object Name, MainWindowTitle, Id)"
+    ]
+  }
+}

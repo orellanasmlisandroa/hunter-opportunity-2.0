@@ -1,0 +1,22 @@
+{
+  "name": "cazador-de-senales",
+  "version": "0.1.0",
+  "description": "Sistema de prospección trigger-based para negocios locales LATAM",
+  "scripts": {
+    "radar": "ts-node src/jobs/runReviewRadar.ts",
+    "build": "tsc",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.27.0",
+    "@supabase/supabase-js": "^2.45.0",
+    "apify-client": "^2.9.0",
+    "dotenv": "^16.4.5",
+    "resend": "^3.5.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5"
+  }
+}

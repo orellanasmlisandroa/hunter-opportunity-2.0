@@ -1,0 +1,427 @@
+La Chispa — Cazador de Señales 🎯
+🔒 Toque de Midas · contenido exclusivo. Esta Chispa no es teoría motivacional. Es un negocio completo con su lógica, su motor técnico, sus prompts y sus precios. Lo que sigue es el plano. El edificio lo levantas tú esta semana.
+
+TL;DR — En una frase
+La mayoría de la gente persigue clientes a ciegas. Tú vas a construir una máquina que detecta el momento exacto en que un negocio acaba de tener un problema visible, y le tocas la puerta con la solución antes de que se enfríe la herida.
+
+Eso es el Cazador de Señales. Y la parte buena: paga desde el primer cliente, no en seis meses.
+
+Los 3 anclajes (por qué esta idea es Chispa y no humo)
+Anclaje	Qué hay acá
+🟢 Mercado verificable	Negocios locales con plata: clínicas estéticas, dentistas, restaurantes premium, hoteles boutique, inmobiliarias, agencias. En LATAM hay millones, y todos dejan señales públicas todos los días.
+🟢 Pipeline ejecutable	Detectar señal → calificar → generar mensaje → contactar. Construible con Apify + Supabase + un LLM + Resend. Los 10 prompts para construirlo están adentro de este documento.
+🟢 Prospecto identificable	No "cualquiera". El prospecto es el negocio que acaba de recibir una mala reseña, cambiar su web, instalar una herramienta o postear una vacante. La señal te dice exactamente a quién y cuándo.
+MÓDULO 1 — El gancho: el dinero está al principio
+Antes de explicarte cómo funciona, quiero que veas por qué vale la pena leer hasta el final.
+
+La mayoría de los negocios de software te hacen sangrar plata durante meses antes de cobrar el primer dólar. Este es al revés. Este cobra setup por adelantado + mensualidad recurrente. Es decir: cierras un cliente esta semana y te entra dinero esta semana.
+
+Estos son los rangos que salieron del análisis de mercado para LATAM (estimaciones, no promesas):
+
+Oferta	Setup inicial	Mensual
+Recuperación de reputación con IA	$300 – $1,500	$150 – $700
+Recepcionista IA / bot de WhatsApp	$500 – $2,500	$200 – $1,000
+Radar de señales para agencias	$500 – $2,000	$300 – $1,500
+Automatización interna a medida	$1,000 – $5,000	$300 – $2,000
+La matemática que importa — tus primeros 10 clientes:
+
+Copiar
+Escenario conservador:  setup ~$500   · mensual ~$200  → $5,000 de entrada + $2,000/mes recurrente
+Escenario razonable:    setup ~$1,000 · mensual ~$400  → $10,000 de entrada + $4,000/mes recurrente
+Escenario bueno:        setup ~$2,000 · mensual ~$750  → $20,000 de entrada + $7,500/mes recurrente
+El escenario razonable es alcanzable si eliges un nicho con plata y entras por una herida visible. No estoy hablando de hacerte rico en una semana. Estoy hablando de que tu primer cheque puede ser de $500 a $1,000 este mes, y que cada cliente que cierras te deja una mensualidad que se acumula.
+
+💎 La promesa real: no es "aprende IA". Es "consigue tus primeros clientes pagando, rápido, vendiendo algo que el cliente entiende sin que tengas que educarlo".
+
+MÓDULO 2 — La lógica que nadie usa: cazar la herida fresca
+Acá está lo que hace a este negocio raro. Lo que casi nadie hace.
+
+Lo que hace todo el mundo (y por eso no funciona)
+El vendedor promedio agarra una lista, escribe un mensaje genérico — "Hola, hago automatizaciones con IA, ¿te interesa?" — y lo dispara a 500 personas como ametralladora. Tasa de respuesta: casi cero. ¿Por qué? Porque le está hablando a gente que en ese momento no tiene el problema en la cabeza. Está interrumpiendo.
+
+Lo que vas a hacer tú (francotirador, no ametralladora)
+Tú no persigues a nadie. Tú escuchas la frecuencia donde los negocios gritan sus problemas en público, todos los días, sin darse cuenta:
+
+Una clínica acaba de recibir 3 reseñas de 1 estrella que dicen "nunca contestan el teléfono".
+Un restaurante agregó una página /eventos a su web ayer.
+Una inmobiliaria acaba de postear una vacante de "asistente de ventas".
+Un e-commerce instaló un pixel de Meta esta semana pero no tiene CRM conectado.
+Cada una de esas cosas es una mano levantada sin que el negocio sepa que la levantó. Es una herida fresca. Y tú llegas con la cura justo cuando duele, refiriéndote al evento exacto:
+
+"Vi que aparecieron unas reseñas delicadas esta semana sobre la atención. Tengo un sistema que detecta esto apenas pasa y ayuda a responder y recuperar al cliente molesto antes de que se vuelva más caro."
+
+Por qué esto crea curiosidad y casi obliga a responder
+El prospecto lee tu mensaje y piensa: "¿cómo supo esto?". Esa pregunta es un gancho de curiosidad que rompe el patrón. No estás vendiendo IA abstracta — estás demostrando que ya hiciste el diagnóstico. Le estás mostrando una herida que él ya siente. Eso no se ignora igual que un pitch genérico.
+
+Por qué casi nadie lo hace (y por qué es TU ventaja)
+Por una sola razón: hay que construir una pequeña máquina que escuche esas frecuencias. El vendedor promedio no sabe programar, así que se queda con la ametralladora. Tú, con Claude Code, sí puedes construir la máquina. Esa barrera técnica es exactamente el foso que te protege.
+
+🎯 El flip mental de la semana: Deja de vender "lo que tú haces". Empieza a vender "el problema exacto que el cliente ya tiene visible, ahora mismo".
+
+MÓDULO 3 — El campo de caza: las 5 fuentes de señales
+Hay alrededor de 160 señales posibles. No las persigas todas. Una señal sirve cuando cumple 4 condiciones:
+
+Es pública o accesible por API/scraping.
+Cambia con frecuencia (hay presa nueva seguido).
+El dolor es obvio (no hay que convencer al cliente de que tiene el problema).
+Tu oferta se entiende en una frase.
+Las señales se agrupan en 5 fuentes. De más fácil a más difícil de construir:
+
+A. Google Maps / Reseñas — empieza acá
+Detectas: reseñas nuevas, rating cayendo, reseñas sin responder, palabras de dolor ("no contestan", "lento", "esperé"), negocios con muchas reseñas pero sin web. Herramienta: Apify o SerpApi. Vendes: recepcionista IA, gestor de reputación, web + agenda.
+
+B. Monitoreo de sitios web
+Detectas: página nueva, cambio de precios, servicio nuevo, ubicación nueva, formulario roto. Herramienta: changedetection.io, Playwright, diff de sitemap. Vendes: landing, embudo, campaña de lanzamiento, CRM.
+
+C. Stack tecnológico
+Detectas: instalaron HubSpot/Calendly/Shopify/un pixel, o les FALTA una herramienta clave. Herramienta: BuiltWith, Wappalyzer. Vendes: integración, conexión al CRM, tracking, automatización.
+
+D. Vacantes / contratación
+Detectas: contratan vendedor, soporte, recepcionista, operaciones. La vacante te dice literalmente qué tarea quieren resolver. Herramienta: Google Jobs (SerpApi), scrapers de LinkedIn/Indeed. Vendes: "empleado IA antes de que contrates".
+
+E. Redes sociales
+Detectas: post con muchas preguntas ("¿precio?", "¿cómo reservo?"), post viral sin embudo, comentarios sin responder. Herramienta: scrapers de Apify. Vendes: comment-to-DM, bandeja IA, captura de leads. (La más ruidosa — déjala para después.)
+
+🔥 La apuesta más fuerte: Google Maps reseñas + monitoreo de webs + cambios de stack. Con esas tres fuentes construyes una máquina de oportunidades muy potente sin depender de ninguna plataforma cerrada.
+
+MÓDULO 4 — Tu primera presa: el Radar de Reseñas en Crisis
+No construyas el cazador completo de una. Construye una sola trampa que funcione perfecto. Esa trampa es el Radar de Reseñas en Crisis.
+
+Por qué esta señal primero
+La señal es facilísima de entender.
+El dolor es visible: el dueño ve 3 reseñas malas y entiende el problema sin que tú le expliques nada.
+La oferta es clara: recuperación de reputación con IA.
+Sirve para muchos nichos: restaurantes, clínicas, med spas, dentistas, hoteles, salones, gimnasios.
+La promesa del producto
+"Detectamos negocios que acaban de recibir malas reseñas y les enviamos un mensaje personalizado ofreciendo un sistema IA para responder, recuperar y prevenir más reseñas negativas."
+
+El flujo, en humano
+Copiar
+Entrada:  una lista de ciudades + categorías (ej: "Ciudad de Panamá" + "med spa, clínica dental, restaurante")
+   ↓
+Cada hora o cada día el sistema:
+   1. Busca negocios en Google Maps
+   2. Extrae nombre, web, teléfono, rating, reseñas
+   3. Detecta reseñas NUEVAS de 1–3 estrellas
+   4. Analiza si hay dolor real (con IA)
+   5. Le pone un puntaje al lead (0–100)
+   6. Genera un email personalizado que cita la señal
+   7. Lo guarda en modo borrador (tú revisas antes de enviar)
+   ↓
+Salida:  una tabla de leads listos para contactar, ordenados por puntaje
+Eso es todo el producto en su primera versión. Una señal, bien cazada.
+
+MÓDULO 5 — El motor por dentro: arquitectura, datos y scoring
+El stack (simple, todo conectable con prompts)
+Parte	Herramienta
+Scraping	Apify
+Backend	Node.js / TypeScript
+Base de datos	Supabase
+Cron (correr cada hora)	GitHub Actions, Render Cron, Supabase Edge Function o n8n
+Email	Resend o SendGrid
+IA	Claude / OpenAI / Gemini
+Dashboard	Next.js (o algo simple al principio)
+Camino más rápido para empezar: Apify → Supabase → Claude → Resend → dashboard simple.
+
+La base de datos mínima (4 tablas)
+companies — el negocio (nombre, categoría, ciudad, web, teléfono, email, url de Maps, rating, conteo de reseñas).
+reviews — cada reseña detectada (rating, texto, autor, fecha, sentimiento, tipo de dolor).
+signals — la señal disparada (tipo, resumen, puntaje de severidad, fecha, estado).
+outreach_messages — el email generado (canal, asunto, cuerpo, estado, fecha de envío, estado de respuesta).
+El scoring (mantenlo simple)
+Copiar
++30  reseña de 1 o 2 estrellas
++20  2 o más reseñas negativas en 7 días
++20  el texto menciona espera / mala atención / no contestan / mala comunicación
++10  tiene más de 50 reseñas (negocio con tamaño)
++10  rating general arriba de 4.0 (vale la pena recuperarlo)
++10  tiene web o email detectable
+
+-30  ya fue contactado
+-20  no tiene forma clara de contacto
+-20  la reseña parece falsa o demasiado vaga
+La regla:
+
+85–100 → listo para contactar
+65–84 → revisar a mano
+0–64 → guardar, no contactar
+La regla de oro: NO autopiloto desde el día 1
+Esto te protege de mandar basura y de quemar tu dominio de email.
+
+Fase 1 — Modo Borrador. El sistema detecta y redacta, pero tú revisas antes de enviar. Acá aprendes qué convierte.
+Fase 2 — Autopiloto aprobado. Solo manda solo cuando: puntaje > 85, contacto válido, no contactado antes, señal de los últimos 7 días, mensaje sin promesas exageradas, y con salida elegante tipo "si no tiene sentido, no te molesto de nuevo".
+MÓDULO 6 — Construirlo con Claude Code: los 10 prompts en orden
+Acá está el oro. Si tienes VS Code + Claude Code (o Antigravity), copias estos prompts en este orden y la IA te construye el sistema pieza por pieza. La regla: no le pidas todo de una vez. Una pieza, la pruebas, la siguiente.
+
+Prompt 1 — Crear el proyecto
+Copiar
+Quiero construir un MVP llamado Review Crisis Radar.
+
+Stack:
+- Node.js con TypeScript
+- Supabase para base de datos
+- Apify para scraping de Google Maps/reviews
+- OpenAI o Anthropic para analizar reviews y generar mensajes
+- Resend para enviar emails
+- Cron job para correr cada hora
+- Dashboard simple en Next.js
+
+Objetivo:
+El sistema debe detectar negocios que recibieron reviews negativas recientes,
+calificarlos con un score y generar un email personalizado ofreciendo ayuda con
+reputación y automatización AI.
+
+Crea la estructura inicial del proyecto con:
+1. Backend en TypeScript.
+2. Cliente Supabase.
+3. Esquema SQL para tablas: companies, reviews, signals, outreach_messages.
+4. Variables de entorno necesarias.
+5. README con instrucciones para correr localmente.
+
+No construyas todo de una vez. Primero crea la estructura limpia y funcional.
+Prompt 2 — Crear las tablas en Supabase
+Copiar
+Crea un archivo SQL para Supabase con estas tablas:
+
+companies:
+- id uuid primary key
+- name, category, city, website, phone, email text
+- google_maps_url text unique
+- rating numeric
+- review_count integer
+- created_at, updated_at timestamptz
+
+reviews:
+- id uuid primary key
+- company_id uuid references companies(id)
+- external_review_id text
+- rating integer
+- text, author_name text
+- review_date, detected_at timestamptz
+- sentiment, pain_type text
+
+signals:
+- id uuid primary key
+- company_id uuid references companies(id)
+- signal_type, signal_summary text
+- severity_score integer
+- detected_at timestamptz
+- status text
+
+outreach_messages:
+- id uuid primary key
+- company_id uuid references companies(id)
+- signal_id uuid references signals(id)
+- channel, subject, body, status text
+- sent_at timestamptz
+- reply_status text
+
+Incluye índices útiles para evitar duplicados y buscar señales recientes.
+Prompt 3 — Conectar Apify (traer los datos)
+Copiar
+Crea un módulo src/apify/googleMapsReviews.ts que use la API de Apify para
+ejecutar un actor de scraping de Google Maps reviews.
+
+Requisitos:
+1. Leer APIFY_TOKEN desde .env.
+2. Recibir como input: searchQuery, city, maxResults.
+3. Ejecutar el actor, esperar a que termine, leer el dataset.
+4. Normalizar los resultados a: { name, category, city, website, phone,
+   googleMapsUrl, rating, reviewCount, reviews: [{ externalReviewId, rating,
+   text, authorName, reviewDate }] }
+
+Incluye manejo de errores y logs claros.
+No uses datos mock si la API key está configurada.
+Prompt 4 — Guardar en Supabase (sin duplicar)
+Copiar
+Crea un módulo src/db/saveCompaniesAndReviews.ts.
+
+Debe recibir los resultados normalizados de Apify y guardar companies + reviews.
+
+Reglas:
+- No duplicar companies si google_maps_url ya existe.
+- No duplicar reviews si external_review_id ya existe.
+- Si una company ya existe, actualizar rating, review_count, website, phone, updated_at.
+- Devolver las reviews nuevas detectadas para análisis posterior.
+
+Usa supabase-js. Incluye tipos TypeScript.
+Prompt 5 — Analizar reseñas con IA
+Copiar
+Crea un módulo src/ai/analyzeReview.ts.
+
+Debe recibir una review y devolver:
+{ sentiment: "negative"|"neutral"|"positive",
+  painType: "slow_service"|"bad_communication"|"no_answer"|"pricing_confusion"|"rude_staff"|"quality_issue"|"other",
+  severity: 1-10, summary: string, isActionable: boolean }
+
+El prompt al LLM debe ser estricto:
+- No inventar información. Basarse solo en el texto de la review.
+- Si no hay suficiente info, usar "other" y severity baja.
+- Responder solo JSON válido.
+
+Incluye validación para evitar errores si el modelo devuelve JSON inválido.
+Prompt 6 — Crear las señales
+Copiar
+Crea un módulo src/signals/createReviewCrisisSignal.ts.
+
+Debe analizar reviews nuevas por empresa y crear una señal si cumple alguna regla:
+1. 1 review de 1 estrella con severity >= 8
+2. 2 o más reviews negativas en los últimos 7 días
+3. Review negativa que mencione no_answer, bad_communication o slow_service
+
+Debe calcular severity_score de 0 a 100 y crear un registro en signals con:
+company_id, signal_type="review_crisis", signal_summary, severity_score,
+detected_at, status="new".
+
+Evita duplicar señales similares para la misma empresa en las últimas 72 horas.
+Prompt 7 — Generar el email personalizado
+Copiar
+Crea un módulo src/ai/generateOutreachEmail.ts.
+
+Recibe: company name, category, city, signal summary, review pain type,
+recent review excerpts, offer description.
+Devuelve: { subject: string, body: string }
+
+Reglas:
+- Email corto. Tono humano, respetuoso y consultivo. No invasivo.
+- No mencionar scraping. No prometer resultados garantizados.
+- Referenciar la señal de forma general. Ofrecer ayuda concreta.
+- Terminar con una pregunta simple.
+- Incluir: "Si no tiene sentido, no te molesto de nuevo."
+
+Idioma: español neutro.
+Prompt 8 — Enviar con Resend (con freno de seguridad)
+Copiar
+Crea un módulo src/email/sendEmail.ts usando Resend.
+
+Requisitos:
+1. Leer RESEND_API_KEY y FROM_EMAIL desde .env.
+2. Recibir to, subject, body. Enviar email.
+3. Guardar status en outreach_messages. Manejar errores.
+4. No enviar si status ya es "sent".
+5. Agregar modo DRY_RUN=true para que en desarrollo solo imprima el email
+   sin enviarlo.
+Prompt 9 — El workflow completo (la orquesta)
+Copiar
+Crea un script src/jobs/runReviewRadar.ts.
+
+Flujo:
+1. Leer search queries desde config/targets.json.
+2. Para cada target: llamar Apify → guardar companies y reviews → analizar
+   reviews nuevas → crear señales → generar emails para señales con score >= 85
+   → guardar como draft → si AUTOPILOT_SEND=true, enviar.
+3. Mostrar resumen: empresas procesadas, reviews nuevas, señales, emails generados, enviados.
+
+Logs claros y manejo de errores POR target (si falla uno, el resto continúa).
+Prompt 10 — Dashboard simple
+Copiar
+Crea un dashboard Next.js simple para Review Crisis Radar.
+
+Páginas:
+1. /signals — lista señales recientes, filtros por score/ciudad/categoría/status, botón "ver email".
+2. /companies/[id] — datos del negocio, reviews recientes, señales, mensajes.
+3. /outreach — emails en draft, botón aprobar, botón descartar.
+
+Componentes simples. No necesito diseño perfecto, pero sí usable.
+El Prompt Maestro — para clonar la máquina a cualquier señal nueva
+Cuando quieras pasar de reseñas a cualquiera de las otras 159 señales, usa este prompt para diseñar el producto antes de construirlo:
+
+Copiar
+Tengo esta idea de señal: [DESCRIBE LA SEÑAL]
+Quiero convertirla en un producto MVP de prospección trigger-based.
+
+Analiza:
+1. Qué dolor indica esta señal.
+2. Qué tipo de cliente la tendría.
+3. Qué oferta AI/automatización puedo vender.
+4. Qué datos necesito capturar y de qué fuentes.
+5. Qué tan fácil es construirlo (1-10).
+6. Qué tan fuerte es la intención de compra (1-10).
+7. Qué filtros ICP debo aplicar.
+8. Qué mensaje inicial debería enviar.
+9. Qué precio podría cobrar (setup y mensualidad).
+
+Dame una versión práctica, no teórica.
+MÓDULO 7 — Venderlo sin sonar a "vendo IA"
+Construir la máquina es la mitad. La otra mitad es cerrar. Y acá la regla es brutalmente simple.
+
+No digas esto ❌
+"Te vendo automatización con IA."
+
+Di esto ✅
+"Detecté que tu negocio está perdiendo oportunidades por [problema específico]. Te instalo un sistema que lo resuelve y te avisa antes de que se vuelva más caro."
+
+El email inicial que funciona
+Copiar
+Hola {{negocio}},
+
+Vi que recientemente aparecieron algunas reseñas delicadas, especialmente
+relacionadas con {{dolor}}.
+
+Trabajo ayudando a negocios locales a responder más rápido, recuperar clientes
+molestos y prevenir que una mala experiencia se vuelva más reseñas negativas.
+
+Podría mostrarte un sistema simple que:
+- detecta reseñas negativas apenas aparecen,
+- prepara respuestas profesionales con IA,
+- alerta al equipo,
+- y ayuda a pedir reseñas positivas a clientes satisfechos.
+
+¿Te gustaría que te mande una mini auditoría gratuita de lo que encontré?
+
+Si no tiene sentido, no te molesto de nuevo.
+El precio, por etapas (no empieces barato)
+Nada de $49/mes — eso te mata con soporte y onboarding. Sube el precio a medida que tienes pruebas:
+
+Copiar
+Clientes 1–3  (beta founding):  $500 setup   · $250/mes   ← a cambio de testimonio/caso de estudio
+Clientes 4–7:                    $1,000 setup · $400–$500/mes
+Clientes 8–10:                   $1,500–$2,000 setup · $600–$800/mes
+Si cierras los 10 así: ~$10,500–$14,500 de setup + ~$4,000–$5,500/mes recurrente. Meta razonable, no fantasía.
+
+El nicho que yo elegiría primero
+Clínicas estéticas / med spas / dentistas. ¿Por qué? Porque un cliente nuevo vale mucho para ellos, así que pagan sin pestañear si entiendes su ROI. Y el dolor de reputación es altísimo en esos rubros.
+
+MÓDULO 8 — El sprint de 14 días + criterio de éxito
+No midas el éxito por "el sistema funciona técnicamente". Mídelo por clientes. Este es el plan de validación:
+
+Copiar
+Día 1–2:   Elige UN nicho con plata (med spa / dentista / restaurante premium).
+Día 3–5:   Detecta 100 señales reales (negocios con herida visible esta semana).
+Día 6–10:  Contacta 100–200 negocios. No vendas todo: ofrece una mini-auditoría o demo.
+Día 11–14: Ajusta oferta y precio según las respuestas.
+La matemática del embudo (qué esperar de verdad)
+Copiar
+100 señales detectadas
+   ↓
+50 leads calificados
+   ↓
+30 emails enviados
+   ↓
+5 respuestas
+   ↓
+2 llamadas
+   ↓
+1 cliente beta
+Si eso pasa, tienes algo. Si nadie responde, el problema es el nicho, el mensaje, la oferta o el canal — y lo ajustas. No es magia, es un sistema medible.
+
+Lo que NO harías al principio
+Los 160 signals a la vez.
+DMs automáticos en redes / scraping agresivo de plataformas cerradas.
+Auto-outreach sin revisión humana.
+Señales abstractas tipo "parece que están creciendo".
+Primero: señales simples, visibles y con oferta obvia. Lo demás viene después.
+
+MÓDULO 9 — Cierre Mentor Eric
+🔥 Fuego: el Cortexiano que arranca esta semana elige un nicho, construye el Radar de Reseñas en Crisis con los 10 prompts, detecta sus primeras 100 señales y manda sus primeros 30 emails revisados. En 14 días no tiene "una idea de negocio con IA" — tiene una máquina corriendo que escupe leads calificados todos los días, y muy posiblemente su primer cliente beta pagando setup + mensualidad. La barrera técnica que frena a todos los demás vendedores es justo el foso que lo protege a él.
+
+❄️ Extinto: si pasa la semana leyendo este documento sin elegir nicho, sin abrir Claude Code, sin pegar el Prompt 1, el Cortexiano sigue siendo bueno con la IA pero sin un solo cliente. Y mientras tanto los negocios de su ciudad siguen recibiendo reseñas malas todos los días, gritando su dolor en público — y nadie está escuchando esa frecuencia. La presa está ahí. Solo falta el cazador.
+
+Tu primera presa esta semana: un nicho, una señal, los 10 prompts, 100 señales detectadas. Nada más. Esa es la chispa.
+
+Recursos
+🔗 La conversación completa con ChatGPT (todo el razonamiento crudo detrás de esta Chispa, paso a paso, incluyendo la viabilidad, los 160 signals, los precios y los 10 prompts): https://chatgpt.com/share/6a0e495a-0440-83e8-9794-5212115aca9f
+
+Léela solo si quieres ver cómo se llega a estas conclusiones desde cero. Todo lo importante ya está destilado arriba — el link es para los curiosos que quieren la materia prima entera.
+
+Herramientas mencionadas: Apify · Supabase · Resend · SerpApi · changedetection.io · BuiltWith · Wappalyzer

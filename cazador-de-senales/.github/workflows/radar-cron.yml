@@ -1,0 +1,39 @@
+name: Review Crisis Radar
+
+on:
+  schedule:
+    - cron: '0 * * * *'   # cada hora en punto
+  workflow_dispatch:        # ejecución manual desde Actions
+
+jobs:
+  run-radar:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Correr el radar
+        run: npx ts-node src/jobs/runReviewRadar.ts
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          FROM_EMAIL: ${{ secrets.FROM_EMAIL }}
+          DRY_RUN: 'true'
+          AUTOPILOT_SEND: 'false'
+
+      - name: Notificar en caso de falla
+        if: failure()
+        run: echo "::error::El radar falló. Revisar logs arriba."

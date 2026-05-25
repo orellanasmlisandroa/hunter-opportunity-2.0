@@ -1,0 +1,96 @@
+detras-del-hombro-midas.md
+Detrás de cámaras — exclusivo Midas. Eric trabajando en vivo, sin guion: arma empleados-IA que convierten la URL de un negocio en una landing page moderna.
+
+TL;DR — La cocina de los empleados-IA
+
+Lo que no se usa en cada mensaje, va en skill manual. Las skills automáticas se cargan en cada "hola" y te comen tokens de fondo. Reserva la carga automática para lo que de verdad usas siempre.
+Una URL fea entra, un negocio entero sale. Firecrawl saca el markdown, el HTML, las imágenes, los links, el WhatsApp y los servicios del sitio del dueño — solo, gratis, desde tu computador.
+Stitch es generativo: nunca clona idéntico. Dice "85% fiel" y es mentira. Si quieres una copia fiel, no pases por Stitch — clona el HTML y cambia solo colores y texto.
+Armó un coach que NO produce, evalúa. Da nota sobre 10, revisa la regla 60/30/10 de color y caza ghost buttons. Y vive como regla, no como skill — entrenado con 20 videos de YouTube de diseño.
+Cazó dos bugs en vivo. NotebookLM nombra toda imagen screen.png y termina leyendo la vieja; y el comando clear no borra la conversación del servidor, solo el puntero local.
+Cuando un empleado se equivoca, se le ordena repararse. "Arregla tu skill para que no cometas ese error nunca más" — el skill se corrige a sí mismo.
+Para demos puedes inventar datos, pero solo con permiso. El empleado propone los datos que faltan y el usuario aprueba antes de usarlos.
+Dale siempre un modelo. El resultado es muy superior a dejar a Stitch inventar de cero — y con esta lógica de ida y vuelta, los Midas ya pueden armar sus propias skills igual.
+🛠️ Herramientas que Eric usó en el video
+Eric encadena cinco herramientas para que un empleado-IA haga el trabajo completo:
+
+Firecrawl — entra a la URL del negocio y extrae todo: markdown, HTML, imágenes, logos, colores, links, WhatsApp y servicios.
+Stitch (Google) — motor generativo que inventa diseños de landing desde un brief. Brillante para reinventar, pero no clona idéntico.
+NotebookLM — el cerebro del coach de diseño, alimentado con 20 videos de YouTube de diseño de páginas.
+NanoBanana — genera las imágenes dedicadas que faltan (un bar, un plato) cuando el sitio original no las tiene.
+Wispr Flow — para hablarle al sistema en vez de escribir. Eric escribe largo porque habla; tú puedes dictar.
+Si quieres replicar el ejercicio, estas cinco son el stack mínimo del flujo URL → landing.
+
+La fábrica de empleados — cómo Eric arma agentes que paren landing pages solos
+Esto no es un tutorial. Es Eric pensando en voz alta una noche entera, dudando, descubriendo el techo de una herramienta a mitad de camino, cazando dos bugs en vivo y reparando el rumbo sin cortar la cámara. Lo que ves abajo es cómo se piensa y se itera un empleado-IA — para que armes los tuyos igual.
+
+Capítulo 1 — Por qué armo empleados, y por qué los pongo en "manual"
+🎬 ver 0m00s →
+
+Eric pensaba: "Desde anoche estuve preparando un par de nuevos AI agents — vamos a llamarlos así, empleados virtuales IA. Siempre los pongo en skills, pero manual." La intención era sumar dos empleados nuevos al sistema sin pensarlo demasiado.
+
+Pero descubre: que el modo en que registras una skill tiene un costo escondido. "Cada vez que hago un chat y digo 'hola', se mandan todos los skills. No se manda todo, se manda la parte front matter. Pero acumula eso a cada 'hola'. Si yo mando 140 agents, son 140 front matters. Es mucho texto para decir 'hola'." Por eso lo que no es obligatorio que la IA sepa en cada mensaje, lo deja como skill manual. "Eso es un invento que nunca verás en Internet — lo hago a mi manera para ahorrar tokens, para ti y para mí."
+
+Golden nugget: Lo que no se usa en cada mensaje, va en manual. Las skills automáticas se cargan en cada "hola" y te comen tokens de fondo aunque nunca las uses. Y si quieres saber qué hace cualquier skill sin preguntarle a nadie: "copias la ruta, chateas con la IA y le dices 'dame un resumen por categorías de qué hace este sistema' — te contesta en un minuto."
+
+Capítulo 2 — Una URL fea entra, un negocio entero sale
+🎬 ver 7m14s →
+
+Eric pensaba: que para armar una landing del negocio de un cliente tendría que recopilar la información a mano — el nombre, qué sirve, los servicios, las fotos.
+
+Pero descubre: que el empleado lo saca todo solo. "Tú le das la URL original del dueño y te saca un documento de todo lo que es el negocio." Firecrawl entra al sitio y devuelve "todo el markdown de la empresa, el summary, el HTML completo del sitio, la screenshot, los colores, los logos". Y un segundo skill captura la pantalla del sitio gratis desde su propio computador y la guarda. "Cada vez que tú le das una URL, él automáticamente busca el micro nicho y el estilo." Le pasó una plomería y la nombró sola; un abogado y detectó "prestigio". "Lo hizo solo. Lo renombra perfectamente."
+
+Golden nugget: El insumo del cliente es una sola URL. Toda la materia prima de un negocio — texto, imágenes, links, WhatsApp, servicios — ya vive en su web vieja. El empleado la extrae, la clasifica por micro-nicho y deja el negocio entero en tu computador antes de diseñar nada.
+
+Capítulo 3 — El techo de Stitch: generativo no es idéntico
+🎬 ver 17m00s →
+
+Eric pensaba: que si le daba a Stitch un modelo que le gustaba, le devolvería un clon adaptado a su restaurante. "Tenía que hacer lo mismo que él, pero adaptado a Candela."
+
+Pero descubre: que Stitch nunca clona idéntico, por diseño. "El techo de fidelidad de Stitch es por ser generativo, no será un duplicado." Cada ronda le devolvía algo parecido pero distinto. El propio coach le dijo que era "85% fiel" y Eric lo desarmó en vivo: "No, mentira, 85% mentira." La conclusión llegó pensándolo en pantalla: "Si lo queremos igual, lo ideal sería no pasar por Stitch y hacer un clon de HTML y cambiar colores y texto. Va a ser idéntico, dos HTML iguales."
+
+Golden nugget: Elige el motor según lo que quieras. Para una copia fiel del modelo que te gustó, clona el HTML directo y cambia colores + texto — idéntico garantizado. Para un diseño nuevo y único que nadie tiene en el mundo, manda a Stitch a reinventar. El error es pedirle fidelidad a un motor generativo.
+
+Capítulo 4 — El coach que evalúa, no produce
+🎬 ver 24m00s →
+
+Eric pensaba: en empleados que producen páginas. Faltaba uno que las juzgue.
+
+Pero descubre: el valor de un empleado evaluador. Su coach de landing page miró la página y le dio "un 8.5 de 10", después un "9.5 de 10", con crítica concreta: "cumple perfectamente la regla del 10% — 60% un color, 30% un color, 10% un color", "múltiples CTA desenfocados en el hero", y cazó el clásico ghost button: "los ghost carecen de contraste… mucha gente no sabe que es un botón". ¿De dónde saca criterio? "Todo eso es un mentor educador de 20 videos de YouTube." Y el detalle de cocina: el coach no es un skill, vive en las reglas. "Es una regla, no es un skill. Cada vez que consulta el coach, esas son sus reglas a seguir."
+
+Golden nugget: Un empleado que evalúa vale tanto como uno que produce. Destila el criterio de buenos mentores (20 videos de YouTube → NotebookLM) en una regla que da nota sobre 10 y nombra los tres problemas más importantes. Tu productor diseña; tu coach impide que publiques algo mediocre.
+
+Capítulo 5 — Dos bugs cazados en vivo
+🎬 ver 31m00s →
+
+Eric pensaba: que el coach le daba veredictos confiables cada vez que le mandaba una imagen nueva.
+
+Pero descubre: dos bugs encadenados, en vivo. El primero: "NotebookLM llama a la imagen screen.png y son todos screen.png. No está viendo tu imagen última." El coach evaluaba la foto vieja — "solo anda la primera vez; la segunda vez te aconseja mal". El segundo, todavía más fino: el comando clear no borraba nada. "El clear solo limpia el puntero local de NotebookLM activo, no la conversación del servidor." Las consultas seguían contaminándose en un solo hilo. "Hallazgo clave: Ask continúa la conversación anterior por defecto. Mis rondas una y dos compartieron hilo, contaminando contexto."
+
+Golden nugget: Cuando un empleado se equivoca, no lo arregles tú — ordénale repararse. Frente a cada error, Eric le dice al skill: "arregla tu skill para que no cometas ese error nunca más", y el empleado reescribe sus propias instrucciones. Pero antes hay que diagnosticar la raíz: una imagen mal nombrada o un contexto sin limpiar envenena todos los veredictos siguientes.
+
+Capítulo 6 — Hablar en vez de escribir, e inventar datos con permiso
+🎬 ver 47m00s →
+
+Eric pensaba: que escribir los pedidos largos a mano era parte del trabajo. "Yo escribo mucho así porque hablo."
+
+Pero descubre: dos atajos. Uno operativo: "deberías tener un sistema para hablar como yo — tú puedes hablar aquí y da igual, y mejor quizás." Y otro de criterio, sobre los datos de un demo: la regla por defecto es no inventar, pero "si quiere inventar datos, ya que son demos, se podría — pero con la autorización del usuario". El empleado propone: "yo tengo estos datos, los voy a usar; los que no tengo, sugiero estos. ¿Lo aceptas sí o no?" También cazó la maña de Stitch sin modelo: "si no tiene un modelo, siempre hace dos secciones y para" — hay que iterar pidiendo una sección a la vez.
+
+Golden nugget: Velocidad por voz, honestidad por permiso. Dictar te quita la fricción de escribir pedidos largos. Y para una demo, inventar datos es válido solo si el empleado los marca como sugeridos y el usuario los aprueba — nunca pasarlos como reales sin avisar.
+
+Capítulo 7 — La prueba final: "yo no sé nada"
+🎬 ver 1h05m →
+
+Eric pensaba: poner a prueba si el sistema sirve para alguien que llega sin saber nada. Se metió en el papel: "Yo soy nadie, no sé nada, nunca lo probé."
+
+Pero descubre: que el sistema se auto-explica y se auto-ejecuta. Escribió como un principiante: "quiero hacer plata agarrando páginas web feas, convertir la URL en una página supermoderna y vendérsela al dueño — ¿cómo hago?" La IA leyó las skills y respondió: "Tienes suerte. El sistema ya tiene una skill construida exactamente para tu modelo de negocio. Pásame la URL." Le pasó un electricista feo de Panamá → Firecrawl extrajo todo ("las imágenes, los links, WhatsApp, la homepage, todos los servicios") → salió una página moderna. Y cuando Stitch falló en una sección, el empleado fue honesto: "el Stitch falló como advertía el README, solo generó la foto del chef suelta; así que las cinco secciones nuevas las construí editando el HTML directo, gratis".
+
+Golden nugget: El sistema rutea solo al principiante. Un Cortexiano que no sabe nada describe su objetivo de negocio en lenguaje natural y la IA lo manda a la skill correcta y la ejecuta. Eso es lo que Eric te deja avanzado: "ustedes solo ponen la URL y contestan las preguntas."
+
+El patrón unificador — pensar, reiterar, modificar el skill
+Ninguno de estos empleados nació perfecto. Stitch mentía con el 85%, NotebookLM leía la foto vieja, el clear no limpiaba, una sección salía suelta. En cada tropiezo Eric hizo lo mismo: diagnosticó la raíz, le ordenó al skill repararse, y siguió. "La lógica de ida y vuelta — pensar, reiterar y modificar los skills para que se mejoren." Esa es la habilidad de fondo, por encima de cualquier herramienta: tratar a cada empleado-IA como algo vivo que mejora cada semana, no como un botón que funciona o no.
+
+Y dentro de esa lógica, una decisión recurrente: dale siempre un modelo. "Idéntico sería: no te vayas a Stitch, clónalo y hazme la versión mía con mi texto. O mandar a Stitch que sea similar y un diseño reinventado, único, que nadie tiene en el mundo." Las dos rutas son válidas; dejar a la IA inventar desde cero sin referencia, casi nunca.
+
+Cierre — los Midas ya son autónomos
+Te dejé entrar a la cocina entera: las dudas, los bugs, las rondas que no salieron, y el momento exacto en que cada empleado aprendió a no repetir su error. "Ya aprendieron a ser autónomos. Los Midas son autónomos, ya pueden hacer lo mismo que yo ahora." Arma tus propias skills a tu gusto, practica, equivócate y repáralas. Y si construyes algo bueno, compártemelo — lo probamos bien y lo metemos al sistema. Nos vemos pronto.

@@ -1,0 +1,1451 @@
+CONVERSACION CHATGPT DE LA CHISPA
+https://www.upwork.com/developer/documentation/graphql/api/docs/index.html#group-Types-Job-Posts
+
+¿Puedes decirme si con la API de Upwork:
+1. Primero, ¿cuesta?
+2. Segundo, si live podemos tener un sistema automatizado que captura, con filtros, nuestro tipo de oferta de trabajo o de jobs que se están posteando?
+
+Voy a verificar la documentación actual de Upwork y, con eso, separar lo que está confirmado de lo que depende de permisos/limitaciones de la API.
+
+Thought for 14s
+
+Sí. Basado en la documentación oficial actual de Upwork:
+
+1. ¿Cuesta usar la API de Upwork?
+
+No veo una tarifa publicada para usar la API en sí. Upwork dice que clientes y freelancers “en cualquier plan de membresía” pueden solicitar acceso a la API. Eso sugiere que no hay un costo directo por pedir/usar la API, pero sí requiere aprobación.
+
+Lo importante:
+
+Hay que solicitar una API key.
+Upwork revisa la solicitud.
+Responden por email, normalmente dentro de dos semanas.
+La cuenta debe tener nombre válido, dirección, foto, método de pago activo/verificado e identidad verificada.
+El límite diario permitido es 40,000 requests por día.
+Upwork aclara que la API no está disponible para uso comercial. Esto es clave si quieren revender el sistema como SaaS o producto para terceros.
+
+Mi lectura: para uso interno de tu equipo/agencia probablemente es viable, pero si la idea es vender una herramienta pública que monitoree jobs de Upwork para otros usuarios, ahí puede chocar con la restricción de “no commercial use”.
+
+2. ¿Se puede tener un sistema automatizado/live que capture jobs con filtros?
+
+Sí, pero con matices.
+
+Upwork tiene queries GraphQL para buscar job posts del marketplace. La más relevante es marketplaceJobPostingsSearch, que permite buscar trabajos y aplicar filtros mediante marketPlaceJobFilter, además de usar opciones de ordenamiento con sortAttributes. Esa query requiere el permiso “Read marketplace Job Postings”.
+
+También existe publicMarketplaceJobPostingsSearch, descrita como búsqueda de job postings públicos en el marketplace, usando filtros de búsqueda.
+
+Entonces, para un sistema tipo “radar de oportunidades”, se podría hacer algo así:
+
+Autenticarse con OAuth/API key.
+Ejecutar búsquedas cada X minutos.
+Filtrar por keywords, categoría, skills, presupuesto, país, experiencia, fecha, etc., según los campos disponibles.
+Guardar los IDs ya vistos.
+Detectar nuevos jobs.
+Enviar alertas a Slack, email, Telegram, CRM, Notion, Airtable, Google Sheets, etc.
+
+Sobre “live”: Upwork sí documenta Subscriptions in GraphQL, que funcionan con webhooks para eventos. La documentación menciona eventos de Job postings (JP) como NEW, UPDATE y CLOSE. Pero también dice que las subscriptions están disponibles solo para clientes y que cada subscription debe ser revisada y aprobada por el equipo de Upwork antes de quedar activa.
+
+Mi conclusión práctica:
+
+Opción A — Polling: más realista para empezar.
+Consultar la API cada 5, 10 o 15 minutos con filtros. Esto no es 100% “live”, pero es suficientemente cercano para capturar nuevos jobs rápido, siempre respetando el límite de requests.
+
+Opción B — Webhooks/subscriptions: más “live” de verdad.
+Posible según la documentación, pero depende de que Upwork apruebe la subscription y de que tu cuenta/tipo de uso califique.
+
+Resumen directo
+
+Sí, se puede construir un sistema automatizado de captura de jobs con filtros usando la API de Upwork.
+No parece tener un costo directo publicado, pero requiere aprobación, permisos correctos y respetar límites.
+Para live real, usarías subscriptions/webhooks, pero eso necesita revisión/aprobación de Upwork.
+Para producción rápida, yo empezaría con polling + base de datos + alertas.
+
+Fuentes
+Archivo cargado
+Archivo cargado
+Lo que a lo mejor lo puedo hacer con Apify, así que no es un problema. Lo que quiero estar seguro es si es un negocio viable. Vamos a hacer lluvias de ideas aquí. Mira lo que pasó en un vídeo de un youtuber que dio muchas buenas ideas, y quizás puedes investigar más. Te voy a dar el transcript completo, que podría ayudarte a entender el tipo de negocio que me gustaría montar, y tú me dices qué tan viable puede ser, ¿de acuerdo? 
+
+Sí: de los 160, muchos se pueden detectar con APIs/scrapers cada hora. La clave es clasificarlos por “facilidad técnica”: APIs oficiales primero, scraping estructurado segundo, scraping frágil tercero.
+
+Thought for 11s
+
+Sí. Muchos de los 160 puntos son bastante fáciles de construir con APIs, Apify Actors, cron jobs, webhooks y un poco de base de datos. Pero no todos valen la pena al inicio.
+
+Mi recomendación: no intentes hacer los 160. Empieza por las señales que cumplen estas 4 condiciones:
+
+La señal es pública o accesible por API/scraping.
+La señal cambia con frecuencia.
+El dolor es obvio.
+Tu oferta AI/automatización se entiende en una frase.
+Ranking de facilidad técnica
+Nivel 1 — Muy fácil de construir
+
+Estas son las mejores para un MVP. Se pueden revisar cada hora con cron, Apify, SerpApi, APIs oficiales o scrapers simples.
+
+Señal	Fuente técnica	Oferta AI posible	Facilidad
+Reviews negativas nuevas	Google Maps / Google Business Profile / Apify	AI review manager, reputación	9/10
+Reviews sin responder	Google Business Profile / scraper	Respuestas con IA	9/10
+Negocio con muchas reviews y sin web	Google Maps scraper	Web + chatbot + booking	9/10
+Cambios en página web	changedetection.io / Playwright	Automatización, CRO, landing	9/10
+Nueva página de servicio	Sitemap + web diff	Launch kit AI	8.5/10
+Job postings nuevos	Google Jobs / LinkedIn / Indeed / Apify	AI ops, recruiting, automation	8.5/10
+Nuevo pixel o herramienta instalada	BuiltWith / Wappalyzer	Setup técnico, tracking, CRM	8.5/10
+Formularios rotos	Playwright check	Reparación + CRM automation	8/10
+Web lenta o con errores	PageSpeed API / Lighthouse	Optimización + conversión	8/10
+Negocio sin CRM visible	Wappalyzer/BuiltWith	CRM + follow-up automation	8/10
+Instagram/Facebook posts nuevos	Apify social scrapers	Comment-to-DM, AI inbox	7.5/10
+Eventos nuevos	Eventbrite/Facebook/Meetup scraping	Event funnel automation	7.5/10
+Productos agotados	Shopify scraping / sitemap	Back-in-stock automation	7.5/10
+Cambios de precio	Web diff	Pricing/CRO automation	7.5/10
+
+Google Business Profile tiene APIs para trabajar con datos de reseñas, incluyendo listar reviews y responderlas para ubicaciones administradas; para negocios externos normalmente se usarían scrapers o proveedores tipo Apify/SerpApi. Apify también tiene scrapers de Google Maps/reviews y permite programar actores vía API, lo que encaja con un sistema por hora.
+
+Las 25 más fáciles y útiles para empezar
+1. Review crisis detector
+
+Detecta: 2–3 reviews negativas nuevas en 24–72 horas.
+Fuente: Google Maps scraper, Google Business Profile si el negocio es cliente.
+Oferta: “Detectamos que recibiste varias reviews negativas esta semana; podemos instalarte un sistema AI para responder, recuperar clientes y generar reviews positivas.”
+
+Muy buena para: med spas, dentistas, restaurantes, hoteles, gimnasios, clínicas.
+
+2. Reviews sin responder
+
+Detecta: reviews recientes sin respuesta del dueño.
+Fuente: Google reviews scraper.
+Oferta: “Tienes X reviews sin responder; podemos automatizar respuestas profesionales con IA.”
+
+Esta es fácil porque no necesitas interpretar mucho. Es casi booleano: review existe, owner response no existe.
+
+3. Reviews con keywords de dolor
+
+Detecta palabras como: “no contestan”, “lento”, “esperé”, “mala atención”, “nunca respondieron”, “confusing”, “expensive”, “rude”.
+Fuente: reviews.
+Oferta: depende del dolor:
+
+“no contestan” → AI receptionist.
+“lento” → booking/ops automation.
+“mala comunicación” → CRM + SMS automation.
+“precio confuso” → cotizador AI.
+4. Google Business Profile abandonado
+
+Detecta: pocas fotos, pocas publicaciones, reviews sin responder, descripción pobre.
+Fuente: Google Maps scraper.
+Oferta: optimización local + AI content + review engine.
+
+5. Negocio con buen rating pero mala web
+
+Detecta: rating alto en Google, pero web lenta, fea, sin CTA, sin booking.
+Fuente: Google Maps + PageSpeed + scraper web.
+Oferta: “Ya tienes confianza; te falta convertirla en leads.”
+
+6. Negocio con muchas reviews pero sin chatbot/booking
+
+Detecta: alto volumen de demanda, pero web manual.
+Fuente: Google Maps + web scan.
+Oferta: AI receptionist + booking automation.
+
+7. Website change detector
+
+Detecta: cambios en páginas importantes.
+Fuente: changedetection.io, Playwright, sitemap polling.
+Oferta: si cambió algo, significa que hay movimiento.
+
+changedetection.io tiene API para crear y manejar “watches” por URL, con intervalos, filtros y notificaciones; también puede mandar alertas a Discord, Slack, Telegram, webhooks y otros canales.
+
+8. Nueva página de servicio
+
+Detecta: aparece /services/ai-consulting, /emergency-plumbing, /botox, /catering, etc.
+Fuente: sitemap.xml + diff diario/horario.
+Oferta: launch kit para ese nuevo servicio.
+
+Esta es de mis favoritas porque el mensaje es muy natural:
+
+“Vi que agregaste una página para [servicio]. Podemos ayudarte a generar citas/leads para ese servicio esta misma semana.”
+
+9. Nueva ubicación
+
+Detecta: página /locations/new-city, Google Maps nuevo, post social “new location”.
+Fuente: sitemap, Google Maps, Instagram/Facebook.
+Oferta: lanzamiento local: Google profile, landing, ads, reviews, chatbot.
+
+10. Cambio de tecnología web
+
+Detecta: instalaron HubSpot, Calendly, Intercom, Shopify, Klaviyo, Meta Pixel, Google Tag, GHL, etc.
+Fuente: BuiltWith o Wappalyzer.
+Oferta: implementación, integración, automatización, tracking.
+
+BuiltWith ofrece API para información actual e histórica sobre tecnologías usadas por un sitio, y Wappalyzer ofrece APIs para technology lookup, lead lists, subdominios y verificación de email.
+
+11. Nuevo pixel instalado
+
+Detecta: Meta Pixel, Google Ads, TikTok Pixel, LinkedIn Insight Tag.
+Fuente: Wappalyzer/BuiltWith/Playwright.
+Oferta: tracking audit + campaign automation.
+
+Mensaje natural:
+
+“Vi que ya están preparando tracking. Podemos ayudarte a que esos datos realmente entren al CRM y generen follow-up automático.”
+
+12. Formulario roto o débil
+
+Detecta: form que no envía, no tiene thank-you page, no tiene autoresponder, no tiene CRM.
+Fuente: Playwright script cada semana/hora según caso.
+Oferta: repair + CRM + follow-up automation.
+
+13. Calendly/booking mal usado
+
+Detecta: tienen Calendly o booking, pero sin recordatorios, sin intake, sin CRM visible.
+Fuente: web scan + Wappalyzer.
+Oferta: booking automation + no-show reduction.
+
+14. Chat instalado pero muerto
+
+Detecta: Intercom/Crisp/Tawk/LiveChat instalado, pero offline o sin respuesta.
+Fuente: web scan.
+Oferta: AI chat agent entrenado con su web.
+
+15. Web lenta
+
+Detecta: bajo score en PageSpeed/Lighthouse.
+Fuente: PageSpeed Insights API o Lighthouse programado.
+Oferta: speed + conversion optimization.
+
+16. Job posting de ventas
+
+Detecta: empresa contrata SDR, sales rep, appointment setter.
+Fuente: Google Jobs API, LinkedIn/Indeed scrapers, páginas careers.
+Oferta: lead gen + CRM + AI sales assistant.
+
+SerpApi tiene una Google Jobs API que devuelve resultados estructurados de jobs como título, empresa, ubicación y otros datos; Apify también se usa como plataforma general para scraping, scheduling e integración por API.
+
+17. Job posting de soporte
+
+Detecta: customer support, receptionist, admin assistant.
+Oferta: AI support bot, AI receptionist, helpdesk automation.
+
+Esta es muy buena porque la vacante te dice literalmente qué tarea quieren resolver.
+
+18. Job posting de operaciones
+
+Detecta: operations manager, admin coordinator, data entry, scheduler.
+Oferta: workflow automation, dashboards, SOP bot.
+
+19. Vacante repetida o antigua
+
+Detecta: misma vacante sigue abierta 30–60 días.
+Oferta: “quizás no necesitas contratar; podemos automatizar parte del rol.”
+
+20. Post social con muchas preguntas
+
+Detecta: Instagram/Facebook post con comentarios tipo “precio?”, “cómo reservo?”, “dónde?”, “info?”.
+Fuente: Apify Instagram/Facebook scrapers.
+Oferta: comment-to-DM automation + AI inbox.
+
+Apify mantiene un Instagram Scraper que extrae perfiles, posts, ubicaciones, búsquedas, comentarios, hashtags, likes, fotos y reels, y se puede ejecutar vía API o programar.
+
+21. Post viral sin funnel
+
+Detecta: post con engagement alto comparado con promedio.
+Fuente: social scraper.
+Oferta: landing + retargeting + lead capture.
+
+22. Evento nuevo
+
+Detecta: negocio publica evento en Eventbrite/Facebook/Meetup.
+Fuente: scraping/API.
+Oferta: event funnel + reminders + post-event follow-up.
+
+23. Shopify out-of-stock
+
+Detecta: productos agotados.
+Fuente: Shopify JSON endpoints/sitemap/scraper.
+Oferta: waitlist + back-in-stock automation.
+
+24. E-commerce sin abandoned cart
+
+Detecta: Shopify/WooCommerce + no Klaviyo/Omnisend/Mailchimp visible.
+Fuente: Wappalyzer/BuiltWith.
+Oferta: abandoned cart + email/SMS flows.
+
+25. SaaS con muchas issues públicas
+
+Detecta: GitHub issues nuevas, repetidas o sin responder.
+Fuente: GitHub API.
+Oferta: issue triage bot, docs assistant, support AI.
+
+Las más fáciles por fuente
+A. Google Maps / Reviews
+
+Muy fáciles con Apify o SerpApi.
+
+Puedes detectar:
+
+reviews nuevas
+rating bajo
+rating cayendo
+reviews sin responder
+keywords negativas
+negocios sin web
+negocios con teléfono pero sin booking
+nuevos negocios por zona/categoría
+competidores con reviews malas
+negocios con muchas reviews pero poca presencia digital
+
+Ideal para vender:
+
+AI receptionist
+review manager
+local SEO
+website + booking
+WhatsApp/SMS automation
+
+Esta categoría probablemente debería ser tu primer MVP.
+
+B. Website monitoring
+
+Muy fácil con changedetection.io, Playwright o sitemap diff.
+
+Puedes detectar:
+
+nueva página
+cambio de pricing
+nuevo servicio
+nueva ubicación
+nuevo formulario
+cambio de headline
+nueva página careers
+errores visibles
+cambios de tecnología
+nueva landing
+
+Ideal para vender:
+
+landing pages
+funnels
+CRM automation
+tracking
+AI chatbot
+launch campaigns
+C. Tech stack monitoring
+
+Fácil con BuiltWith/Wappalyzer.
+
+Puedes detectar:
+
+nuevo CRM
+nuevo pixel
+nuevo chatbot
+nuevo ecommerce stack
+nuevo email marketing tool
+cambio de CMS
+falta de herramientas importantes
+herramientas instaladas pero mal conectadas
+
+Ideal para vender:
+
+implementación
+integraciones
+dashboards
+automatizaciones
+tracking audit
+D. Jobs / hiring signals
+
+Fácil-medio.
+
+Puedes detectar:
+
+están contratando ventas
+están contratando soporte
+están contratando ops/admin
+están contratando marketing
+muchas vacantes de golpe
+vacante repetida
+vacante antigua
+nueva página careers
+
+Ideal para vender:
+
+AI employee
+onboarding automation
+recruiting automation
+CRM/sales ops
+lead generation system
+E. Social media
+
+Medio. Muy valioso, pero más ruidoso.
+
+Puedes detectar:
+
+post con muchas preguntas
+dueño hablando de problemas
+post viral
+“DM us”
+“we’re hiring”
+“new location”
+“new service”
+comentarios sin responder
+
+Ideal para vender:
+
+AI inbox
+comment-to-DM
+content repurposing
+lead capture
+social CRM
+Mi selección de MVP: los 5 más rápidos
+
+Si mañana quieres construir algo con cron hourly, yo haría esto:
+
+MVP 1: Review Crisis Radar
+
+Cada hora:
+
+Buscar negocios por nicho/zona.
+Guardar reviews nuevas.
+Si hay 2+ reviews ≤ 3 estrellas en 72 horas → alerta.
+IA resume el problema.
+Genera mensaje.
+Entra al CRM.
+
+Oferta: AI reputation recovery.
+
+MVP 2: AI Receptionist Opportunity Radar
+
+Cada hora o diario:
+
+Scrape reviews.
+Buscar frases: “no answer”, “called”, “waiting”, “appointment”, “never replied”.
+Ver si la web tiene booking/chat.
+Score.
+Outreach.
+
+Oferta: AI receptionist + SMS/WhatsApp follow-up.
+
+MVP 3: New Service Detector
+
+Cada hora/diario:
+
+Monitorear sitemaps de negocios objetivo.
+Detectar URLs nuevas.
+Clasificar si es servicio nuevo.
+Crear mensaje: “vi que lanzaste X”.
+Ofrecer landing/campaña/automation.
+
+Oferta: launch kit.
+
+MVP 4: Tech Adoption Detector
+
+Diario/semanal:
+
+Escanear dominios con BuiltWith/Wappalyzer.
+Detectar herramientas nuevas.
+Mapear herramienta → oferta.
+Ejemplo: “instalaste HubSpot, te ayudamos a conectarlo con WhatsApp y formularios”.
+
+Oferta: integration-as-a-service.
+
+MVP 5: Hiring Pain Detector
+
+Cada hora:
+
+Monitorear jobs por keywords.
+Clasificar rol.
+Si rol = support/admin/receptionist/scheduler/sales → oportunidad.
+Ofrecer automatización parcial del rol.
+
+Oferta: “AI employee before you hire”.
+
+Arquitectura simple
+
+Podrías montar esto así:
+
+Cron job cada hora
+   ↓
+Sources:
+- Apify Actors
+- SerpApi
+- Google Maps/Business APIs
+- Wappalyzer/BuiltWith
+- changedetection.io
+- Playwright scripts
+   ↓
+Normalize data
+   ↓
+Deduplicate
+   ↓
+Waterfall filters
+   ↓
+Score 0–100
+   ↓
+LLM enrichment only for qualified leads
+   ↓
+Generate message
+   ↓
+Push to CRM / Slack / Telegram / Email
+
+Base de datos:
+
+companies
+signals
+reviews
+web_snapshots
+tech_stack_snapshots
+jobs
+contacts
+outreach_messages
+Ejemplo de scoring
++30 señal ocurrió en últimas 24h
++20 dolor explícito en texto
++20 negocio tiene suficiente tamaño/reviews
++15 contacto identificable
++10 oferta nuestra encaja directamente
++5 competidores también muestran señal
+-30 ya contactado
+-20 no tiene web/teléfono/email usable
+-20 señal ambigua
+
+Regla:
+
+Score 80–100 = contactar ya
+Score 60–79 = revisar manualmente
+Score <60 = guardar, no contactar
+Lo que NO haría al principio
+
+No empezaría con:
+
+LinkedIn job change detection.
+DMs automáticos en redes.
+Scraping agresivo de plataformas cerradas.
+Auto-outreach sin revisión.
+Los 160 signals a la vez.
+Señales demasiado abstractas tipo “parece que están creciendo”.
+
+Eso viene después. Primero necesitas señales simples, visibles y con oferta obvia.
+
+Respuesta directa
+
+Sí, hay maneras bastante fáciles para programadores de hacerlo.
+
+Las más fáciles de construir con API/cron hourly serían:
+
+Reviews negativas nuevas
+Reviews sin responder
+Keywords de dolor en reviews
+Cambios en website
+Nuevas páginas de servicio
+Nuevas ubicaciones
+Cambios de tech stack
+Nuevo pixel/CRM/chat instalado
+Web forms rotos
+Jobs nuevos por categoría
+Vacantes antiguas/repetidas
+Posts sociales con muchas preguntas
+Eventos nuevos
+E-commerce out-of-stock
+GitHub issues / support signals para SaaS
+
+Mi apuesta más fuerte: Google Maps reviews + website change detection + tech stack changes.
+Con esas tres fuentes puedes construir una máquina de oportunidades muy potente sin depender de Upwork.
+
+Fuentes
+Ahora viene la parte más importante. Dame una idea razonable de si puedo encontrar tan solo 10 clientes y que me confirmen que quieren trabajar conmigo. ¿Cuánto razonablemente, en precios estándar, especialmente en Latinoamérica, podría estar cobrando quizás por la primera oferta, primer contrato o eventualmente mensual si es un servicio que puede ser mensual? Dame ideas para darme una buena idea. 
+
+Voy a tratar esto como una mini-validación comercial: cuánto podrías cobrar, qué oferta inicial vender, y qué ingresos implican 10 clientes. Separaré estimaciones de hechos de mercado para no venderte humo.
+
+Thought for 11s
+
+Sí: encontrar 10 clientes es razonable, pero no lo plantearía como “vendo AI” sino como una oferta muy concreta basada en una señal dolorosa.
+
+Mi estimación honesta:
+
+10 clientes en Latinoamérica es posible si vendes un servicio simple de alto dolor a negocios con dinero: clínicas estéticas, dentistas, restaurantes premium, hoteles boutique, inmobiliarias, agencias, e-commerce, home services y educación privada.
+No lo veo como “fácil”, pero sí como viable si haces prospección diaria y muestras evidencia específica del problema.
+
+La lógica del video ayuda porque no se trata de mandar mensajes masivos, sino de detectar señales recientes, calificarlas y contactar en el momento correcto. El transcript lo resume bien: monitoreo continuo, calificación ICP, enriquecimiento y mensaje personalizado basado en la señal.
+
+Mi respuesta directa
+
+Para Latinoamérica, yo pensaría en estos rangos:
+
+Oferta	Setup inicial razonable	Mensual razonable
+Review Crisis / reputación con IA	$300–$1,500	$150–$700/mes
+AI receptionist / WhatsApp bot	$500–$2,500	$200–$1,000/mes
+Web + chatbot + booking básico	$700–$3,000	$100–$500/mes
+CRM + follow-up automático	$800–$3,500	$250–$1,200/mes
+Radar de señales para agencias	$500–$2,000	$300–$1,500/mes
+Automatización interna a medida	$1,000–$5,000	$300–$2,000/mes
+Dashboard de oportunidades / leads	$500–$2,500	$200–$1,000/mes
+
+Estos son rangos estimados, no una verdad universal. En LATAM el precio varía muchísimo según país, industria y tamaño del negocio. Un restaurante pequeño en Panamá, Colombia o México puede resistirse a $500/mes; una clínica estética o agencia que vende servicios caros puede pagarlo sin problema si entiende el ROI.
+
+Como comparación externa, guías recientes de agencias AI indican retainers mensuales desde aproximadamente $500 hasta $3,500 para pequeños negocios, y otras fuentes de pricing de automatización AI hablan de setups de varios miles de dólares y mensualidades desde cientos hasta miles según complejidad. Para agencias digitales más tradicionales, los retainers suelen variar ampliamente; fuentes recientes muestran desde alrededor de $1,500–$2,500/mes en agencias boutique o entry-level, hasta muchísimo más para agencias grandes.
+
+La mejor primera oferta, en mi opinión
+
+Yo empezaría con una de estas tres, no con una oferta demasiado amplia.
+
+Opción 1: “AI Reputation Recovery” para negocios locales
+
+Cliente ideal: med spas, dentistas, clínicas, restaurantes premium, hoteles, salones, gimnasios.
+
+Señal: malas reviews recientes, reviews sin responder o reviews diciendo “no contestan”, “mala atención”, “esperé mucho”.
+
+Oferta:
+
+“Te instalamos un sistema que detecta reviews negativas, redacta respuestas profesionales, alerta al equipo, recupera clientes molestos y ayuda a generar más reviews positivas.”
+
+Precio LATAM sugerido:
+
+Setup beta: $300–$700
+Setup normal: $800–$1,500
+Mensual: $150–$500
+Premium: $700–$1,000/mes si incluye WhatsApp, CRM, reportes y gestión continua.
+
+Este es el más fácil de vender porque el dolor es visible. Si el dueño ve tres reviews malas, entiende el problema sin mucha educación.
+
+Opción 2: “AI Receptionist / WhatsApp Follow-up”
+
+Cliente ideal: clínicas, dentistas, inmobiliarias, educación privada, home services, abogados, talleres, spas.
+
+Señal: reviews que dicen que no contestan, web con “contáctanos por WhatsApp”, muchas preguntas en redes, formularios sin seguimiento.
+
+Oferta:
+
+“Te instalamos un asistente por WhatsApp/web que responde preguntas, captura datos, agenda citas y manda follow-ups automáticamente.”
+
+Precio LATAM sugerido:
+
+Setup beta: $500–$1,000
+Setup normal: $1,200–$2,500
+Mensual: $250–$1,000
+Si hay voz/llamadas AI: puede subir a $1,500–$3,000 setup y $500–$1,500/mes.
+
+Esta oferta tiene más valor que reputación porque toca ventas directamente.
+
+Opción 3: “Signal Radar” para agencias o consultores
+
+Cliente ideal: agencias de marketing, freelancers premium, consultores, empresas B2B que necesitan oportunidades.
+
+Señal: reviews malas, jobs nuevos, cambios de web, nuevas ubicaciones, contratación, tech stack.
+
+Oferta:
+
+“Te damos un radar que detecta oportunidades calientes en tu nicho y te manda alertas con contexto, score y mensaje sugerido.”
+
+Precio LATAM sugerido:
+
+Setup: $500–$2,000
+Mensual: $300–$1,500
+Si incluye scraping multifuente + CRM + mensajes + soporte: $1,000–$3,000/mes para clientes más serios.
+
+Este modelo es más B2B y puede pagar más, pero requiere que el cliente entienda prospección y tenga capacidad de cerrar ventas.
+
+¿Cuánto podrías hacer con 10 clientes?
+Escenario conservador
+
+Vendes algo simple a negocios locales.
+
+Setup promedio: $500
+Mensual promedio: $200
+10 clientes = $5,000 iniciales
+MRR = $2,000/mes
+
+Esto ya valida que hay demanda, pero todavía no es negocio grande.
+
+Escenario razonable
+
+Vendes AI receptionist, reputación o CRM básico.
+
+Setup promedio: $1,000
+Mensual promedio: $400
+10 clientes = $10,000 iniciales
+MRR = $4,000/mes
+
+Este me parece el escenario más realista si vendes bien y eliges nichos con dinero.
+
+Escenario bueno
+
+Vendes a clínicas, agencias, inmobiliarias o empresas B2B.
+
+Setup promedio: $2,000
+Mensual promedio: $750
+10 clientes = $20,000 iniciales
+MRR = $7,500/mes
+
+Esto es alcanzable, pero no con cualquier cliente. Necesitas negocios donde un cliente nuevo vale mucho.
+
+Escenario agresivo
+
+Vendes sistema completo: radar + CRM + WhatsApp + IA + reportes.
+
+Setup promedio: $3,000–$5,000
+Mensual promedio: $1,000–$2,000
+10 clientes = $30,000–$50,000 iniciales
+MRR = $10,000–$20,000/mes
+
+Posible, pero yo no lo usaría como expectativa inicial. Lo vería como meta después de tener casos de éxito.
+
+La tabla que más importa
+Tipo de cliente LATAM	Dolor	Capacidad de pago	Mejor oferta	Mensual probable
+Restaurante pequeño	Reviews, reservas	Baja-media	Reputación + WhatsApp	$100–$300
+Restaurante premium	Reviews, reservas, eventos	Media	AI receptionist + reviews	$250–$700
+Med spa / estética	Citas, reviews, leads	Alta	AI receptionist + review recovery	$400–$1,200
+Dentista / clínica	Citas, recepción, seguimiento	Alta	WhatsApp + agenda + CRM	$400–$1,500
+Inmobiliaria	Leads, seguimiento	Alta	CRM + AI follow-up	$500–$2,000
+Agencia de marketing	Prospección	Media-alta	Signal Radar	$500–$2,000
+E-commerce	Carritos, soporte	Media	AI support + flows	$300–$1,200
+Educación privada	Admisiones, WhatsApp	Media-alta	Enrollment automation	$500–$1,500
+Home services	Cotizaciones, llamadas	Media	AI quote + receptionist	$300–$1,000
+Mi pricing recomendado para los primeros 10 clientes
+
+No empezaría barato tipo $49/mes. Eso te mata, porque vas a tener onboarding, bugs, soporte y personalización.
+
+Yo haría esto:
+
+Beta founding clients
+
+Para los primeros 3 clientes:
+
+$500 setup
+$250/mes
+A cambio de permiso para usar resultados como caso de estudio.
+Clientes 4 al 7
+$1,000 setup
+$400–$500/mes
+Clientes 8 al 10
+$1,500–$2,000 setup
+$600–$800/mes
+
+Con eso, si cierras 10 clientes:
+
+Setup total aproximado: $10,500–$14,500
+MRR aproximado: $4,000–$5,500/mes
+
+Eso es una meta razonable.
+
+Cómo venderlo sin sonar como “vendo IA”
+
+No digas:
+
+“Te vendo automatización con IA.”
+
+Di:
+
+“Detecté que tu negocio está perdiendo oportunidades por [problema específico]. Te instalo un sistema que lo resuelve y te avisa antes de que se vuelva más caro.”
+
+Ejemplos:
+
+Para reviews:
+
+“Vi que recibiste varias reseñas negativas recientes y algunas mencionan atención/tiempo de respuesta. Te puedo instalar un sistema que responde reviews, alerta al equipo y ayuda a recuperar clientes molestos.”
+
+Para WhatsApp:
+
+“Vi que muchas personas te preguntan por precio/citas en redes o WhatsApp. Te puedo instalar un asistente que responde, califica y agenda automáticamente.”
+
+Para agencias:
+
+“Te puedo montar un radar que detecta negocios en tu nicho justo cuando muestran señales de compra: malas reviews, nuevas ubicaciones, contrataciones o cambios en su web.”
+
+Qué oferta tendría más probabilidad de conseguir 10 clientes
+
+Mi ranking para conseguir 10 clientes en LATAM:
+
+1. AI receptionist / WhatsApp automation
+
+Probabilidad alta.
+Casi todos los negocios LATAM viven en WhatsApp. Si ayudas a responder, agendar y dar seguimiento, el valor es claro.
+
+Precio razonable: $700–$2,000 setup + $300–$1,000/mes.
+
+2. Reputation/review recovery
+
+Probabilidad alta si detectas el dolor justo a tiempo.
+Es muy tangible. Ideal para restaurantes, clínicas y hoteles.
+
+Precio razonable: $500–$1,500 setup + $150–$700/mes.
+
+3. CRM + follow-up automático
+
+Probabilidad media-alta.
+Muy valioso, pero requiere explicar más.
+
+Precio razonable: $1,000–$3,500 setup + $300–$1,200/mes.
+
+4. Signal Radar para agencias
+
+Probabilidad media, ticket mejor.
+Más sofisticado, menos clientes potenciales, pero pagan más.
+
+Precio razonable: $1,000–$3,000 setup + $500–$2,000/mes.
+
+5. Web + chatbot + booking
+
+Probabilidad media.
+Mucha competencia, pero si entras por una señal específica puede funcionar.
+
+Precio razonable: $700–$3,000 setup + $100–$500/mes.
+
+Cómo validaría si realmente puedes conseguir 10 clientes
+
+Haría una prueba de 14 días.
+
+Día 1–2: elegir nicho
+
+Escoge uno:
+
+Med spas / clínicas estéticas
+Dentistas
+Restaurantes premium
+Inmobiliarias
+Agencias de marketing
+Educación privada
+
+Mi favorito: clínicas estéticas / med spas / dentistas, porque un cliente nuevo vale bastante.
+
+Día 3–5: detectar 100 señales
+
+Busca 100 negocios con señal visible:
+
+reviews malas recientes
+reviews sin responder
+comentarios sin respuesta
+WhatsApp manual
+formulario débil
+web sin booking
+nueva página de servicio
+Día 6–10: contactar 100–200 negocios
+
+No vendas todo. Ofrece mini-auditoría o demo.
+
+Meta razonable:
+
+100 contactos
+10–20 respuestas
+5–10 llamadas
+1–3 cierres
+
+Si cierras 1–3 en la primera tanda, tienes algo. Si nadie responde, el problema puede ser nicho, mensaje, oferta o canal.
+
+Día 11–14: ajustar oferta
+
+Sube o baja pricing según respuesta.
+
+Mi recomendación final
+
+Para los primeros 10 clientes, yo vendería esto:
+
+Oferta principal
+
+“AI WhatsApp + Review Recovery System para clínicas, med spas y dentistas.”
+
+Incluye:
+
+monitoreo de reviews
+alertas de reviews negativas
+respuestas sugeridas con IA
+WhatsApp assistant
+captura de leads
+agenda/citas
+follow-up automático
+dashboard básico
+
+Precio inicial:
+
+$1,000 setup
+$400/mes
+
+Oferta beta:
+
+$500 setup
+$250/mes por 3 meses
+a cambio de testimonio/caso de estudio
+
+Después de 3–5 clientes:
+
+$1,500 setup
+$600/mes
+
+Después de 10 clientes:
+
+$2,500 setup
+$800–$1,200/mes
+Veredicto
+
+Sí, es razonable encontrar 10 clientes, especialmente si eliges un nicho con dinero y entras por una señal dolorosa reciente.
+
+Mi expectativa realista:
+
+Primeros 10 clientes conservador: $2k–$3k MRR.
+Primeros 10 clientes razonable: $4k–$6k MRR.
+Primeros 10 clientes bueno: $7k–$10k MRR.
+Muy bueno: $10k+/MRR, pero requiere mejores clientes y casos de éxito.
+
+Yo no intentaría vender “AI automation general”. Vendería:
+
+“Encontramos el problema exacto que ya está visible y te instalamos el sistema para que no pierdas más clientes por eso.”
+
+Fuentes
+Sí, soy nuevo. Yo tengo VS Code, tengo Claude Code y puedo trabajar todo lo que se puede con la IA. Lo único que me cuesta y que necesito de ti es los prompts que me permiten construir a partir de las ideas.
+
+Quiero pasar de una chispa de idea a al menos un primer producto viable y que de verdad puede funcionar en cualquier empresa que mi sistema detecte y que mande email en autopiloto. ¿Qué me sugieres? 
+
+Te sugiero empezar con un MVP ultra específico, no una plataforma gigante: detectar una sola señal, calificarla bien y generar un email útil. La primera versión debe ser “semi-autopiloto” para evitar spam y aprender qué convierte.
+
+Thought for 8s
+
+Sí. Para ti, siendo nuevo pero con VS Code + Claude Code, yo haría esto:
+
+Producto inicial recomendado
+“Review Crisis Radar”
+
+Un sistema que detecta negocios con reviews negativas recientes y les prepara/contacta con una oferta de ayuda.
+
+Por qué este MVP:
+
+La señal es fácil de entender.
+El dolor es visible.
+La oferta AI es clara.
+No requiere convencer al cliente de que tiene un problema.
+Se puede construir con Apify + Supabase + Resend/SendGrid + un LLM.
+Es aplicable a muchas industrias: restaurantes, clínicas, med spas, dentistas, hoteles, salones, gimnasios.
+
+La primera versión no debe intentar detectar 160 señales. Debe detectar una señal muy buena.
+
+La promesa del producto
+
+“Detectamos negocios que acaban de recibir malas reseñas y les enviamos un mensaje personalizado ofreciendo un sistema AI para responder, recuperar y prevenir más reseñas negativas.”
+
+MVP mínimo viable
+Entrada
+
+Una lista de ciudades + categorías.
+
+Ejemplo:
+
+Ciudad: Ciudad de Panamá
+Categorías:
+- med spa
+- dental clinic
+- restaurant
+- beauty salon
+- hotel
+Sistema
+
+Cada hora o cada día:
+
+Busca negocios en Google Maps.
+Extrae nombre, web, teléfono, rating, reviews.
+Detecta reviews nuevas de 1–3 estrellas.
+Analiza si hay dolor real.
+Puntúa el lead.
+Genera email personalizado.
+Guarda todo en Supabase.
+Manda el email o lo deja en modo revisión.
+Salida
+
+Una tabla tipo:
+
+Negocio	Señal	Score	Problema	Email
+Clínica X	3 reviews negativas en 7 días	91	mala atención/espera	listo
+Restaurante Y	2 reviews malas en 48h	84	servicio lento	listo
+Stack simple
+
+Yo usaría esto:
+
+Parte	Herramienta
+Scraping	Apify
+Backend	Node.js / TypeScript
+Base de datos	Supabase
+Cron	GitHub Actions, Render Cron, Railway, Supabase Edge Function o n8n
+Email	Resend, SendGrid o Gmail API
+IA	OpenAI / Claude / Gemini
+Dashboard simple	Next.js o Retool/Streamlit al principio
+
+Para un principiante, el camino más rápido:
+
+Apify → Supabase → Claude/OpenAI → Resend → Dashboard simple.
+
+Regla importante
+
+No empieces enviando emails 100% automáticos desde el día 1.
+
+Empieza así:
+
+Fase 1: Draft Mode
+
+El sistema detecta leads y genera emails, pero tú revisas antes de enviar.
+
+Fase 2: Approved Autopilot
+
+Solo manda automáticamente si:
+
+Score mayor a 85.
+Tiene email/contacto válido.
+No fue contactado antes.
+Señal ocurrió en los últimos 7 días.
+El mensaje no contiene promesas exageradas.
+Incluye salida tipo “si no te interesa, no te vuelvo a escribir”.
+
+Esto te protege de mandar basura y te ayuda a aprender.
+
+Base de datos mínima
+
+Pídele a Claude Code que cree esto en Supabase:
+
+companies
+- id
+- name
+- category
+- city
+- website
+- phone
+- email
+- google_maps_url
+- rating
+- review_count
+- created_at
+- updated_at
+
+reviews
+- id
+- company_id
+- rating
+- text
+- author_name
+- review_date
+- detected_at
+- sentiment
+- pain_type
+
+signals
+- id
+- company_id
+- signal_type
+- signal_summary
+- severity_score
+- detected_at
+- status
+
+outreach_messages
+- id
+- company_id
+- signal_id
+- channel
+- subject
+- body
+- status
+- sent_at
+- reply_status
+Scoring inicial
+
+Hazlo simple.
+
+Base score: 0
+
++30 si recibió review de 1 o 2 estrellas
++20 si recibió 2+ reviews negativas en 7 días
++20 si el texto menciona espera, mala atención, no contestan o problema de comunicación
++10 si tiene más de 50 reviews
++10 si rating general es mayor a 4.0
++10 si tiene website o email detectable
+
+-30 si ya fue contactado
+-20 si no tiene forma clara de contacto
+-20 si la review parece falsa o demasiado vaga
+
+Regla:
+
+85–100 = listo para contactar
+65–84 = revisar manualmente
+0–64 = guardar, no contactar
+Oferta inicial para vender
+
+No vendas “sistema de IA”. Vende resultado.
+
+Oferta beta
+
+Nombre: AI Reputation Recovery System
+
+Incluye:
+
+monitoreo de reviews negativas
+alertas automáticas
+respuestas sugeridas con IA
+plantilla de recuperación de cliente molesto
+sistema para pedir reviews positivas a clientes felices
+mini dashboard semanal
+
+Precio beta:
+
+$300–$500 setup
+$150–$250/mes
+
+Después de 3 clientes:
+
+$700–$1,200 setup
+$300–$500/mes
+
+Después de 10 clientes:
+
+$1,500+ setup
+$500–$900/mes
+Prompts para Claude Code
+
+Estos son prompts que puedes copiar y pegar.
+
+Prompt 1 — Crear el proyecto
+Quiero construir un MVP llamado Review Crisis Radar.
+
+Stack:
+- Node.js con TypeScript
+- Supabase para base de datos
+- Apify para scraping de Google Maps/reviews
+- OpenAI o Anthropic para analizar reviews y generar mensajes
+- Resend para enviar emails
+- Cron job para correr cada hora
+- Dashboard simple en Next.js
+
+Objetivo:
+El sistema debe detectar negocios que recibieron reviews negativas recientes, calificarlos con un score y generar un email personalizado ofreciendo ayuda con reputación y automatización AI.
+
+Crea la estructura inicial del proyecto con:
+1. Backend en TypeScript.
+2. Cliente Supabase.
+3. Esquema SQL para tablas: companies, reviews, signals, outreach_messages.
+4. Variables de entorno necesarias.
+5. README con instrucciones para correr localmente.
+
+No construyas todo de una vez. Primero crea la estructura limpia y funcional.
+Prompt 2 — Crear tablas Supabase
+Crea un archivo SQL para Supabase con estas tablas:
+
+companies:
+- id uuid primary key
+- name text
+- category text
+- city text
+- website text
+- phone text
+- email text
+- google_maps_url text unique
+- rating numeric
+- review_count integer
+- created_at timestamptz
+- updated_at timestamptz
+
+reviews:
+- id uuid primary key
+- company_id uuid references companies(id)
+- external_review_id text
+- rating integer
+- text text
+- author_name text
+- review_date timestamptz
+- detected_at timestamptz
+- sentiment text
+- pain_type text
+
+signals:
+- id uuid primary key
+- company_id uuid references companies(id)
+- signal_type text
+- signal_summary text
+- severity_score integer
+- detected_at timestamptz
+- status text
+
+outreach_messages:
+- id uuid primary key
+- company_id uuid references companies(id)
+- signal_id uuid references signals(id)
+- channel text
+- subject text
+- body text
+- status text
+- sent_at timestamptz
+- reply_status text
+
+Incluye índices útiles para evitar duplicados y buscar señales recientes.
+Prompt 3 — Conectar Apify
+Crea un módulo src/apify/googleMapsReviews.ts que use la API de Apify para ejecutar un actor de scraping de Google Maps reviews.
+
+Requisitos:
+1. Leer APIFY_TOKEN desde .env.
+2. Recibir como input:
+   - searchQuery
+   - city
+   - maxResults
+3. Ejecutar el actor.
+4. Esperar a que termine.
+5. Leer el dataset resultante.
+6. Normalizar los resultados a este formato:
+
+{
+  name,
+  category,
+  city,
+  website,
+  phone,
+  googleMapsUrl,
+  rating,
+  reviewCount,
+  reviews: [
+    {
+      externalReviewId,
+      rating,
+      text,
+      authorName,
+      reviewDate
+    }
+  ]
+}
+
+Incluye manejo de errores y logs claros.
+No uses datos mock si la API key está configurada.
+Prompt 4 — Guardar en Supabase
+Crea un módulo src/db/saveCompaniesAndReviews.ts.
+
+Debe recibir los resultados normalizados de Apify y guardar:
+1. companies
+2. reviews
+
+Reglas:
+- No duplicar companies si google_maps_url ya existe.
+- No duplicar reviews si external_review_id ya existe.
+- Si una company ya existe, actualizar rating, review_count, website, phone y updated_at.
+- Devolver las reviews nuevas detectadas para análisis posterior.
+
+Usa supabase-js.
+Incluye tipos TypeScript.
+Prompt 5 — Analizar reviews con IA
+Crea un módulo src/ai/analyzeReview.ts.
+
+Debe recibir una review y devolver:
+
+{
+  sentiment: "negative" | "neutral" | "positive",
+  painType: "slow_service" | "bad_communication" | "no_answer" | "pricing_confusion" | "rude_staff" | "quality_issue" | "other",
+  severity: 1-10,
+  summary: string,
+  isActionable: boolean
+}
+
+Usa un LLM.
+El prompt debe ser estricto:
+- No inventar información.
+- Basarse solo en el texto de la review.
+- Si no hay suficiente información, usar "other" y severity baja.
+- Responder solo JSON válido.
+
+Incluye validación para evitar errores si el modelo devuelve JSON inválido.
+Prompt 6 — Crear señales
+Crea un módulo src/signals/createReviewCrisisSignal.ts.
+
+Debe analizar reviews nuevas por empresa y crear una señal si cumple alguna regla:
+
+Reglas:
+1. 1 review de 1 estrella con severity >= 8
+2. 2 o más reviews negativas en los últimos 7 días
+3. Review negativa que mencione no_answer, bad_communication o slow_service
+4. Caída potencial de reputación si hay muchas reviews negativas recientes
+
+Debe calcular severity_score de 0 a 100.
+
+Debe crear un registro en la tabla signals con:
+- company_id
+- signal_type = "review_crisis"
+- signal_summary
+- severity_score
+- detected_at
+- status = "new"
+
+Evita duplicar señales similares para la misma empresa en las últimas 72 horas.
+Prompt 7 — Generar email personalizado
+Crea un módulo src/ai/generateOutreachEmail.ts.
+
+Debe recibir:
+- company name
+- category
+- city
+- signal summary
+- review pain type
+- recent review excerpts
+- offer description
+
+Debe generar:
+{
+  subject: string,
+  body: string
+}
+
+Reglas:
+- El email debe ser corto.
+- Tono humano, respetuoso y consultivo.
+- No sonar invasivo.
+- No mencionar scraping.
+- No prometer resultados garantizados.
+- Referenciar la señal de forma general.
+- Ofrecer ayuda concreta.
+- Terminar con una pregunta simple.
+- Incluir una frase tipo: "Si no tiene sentido, no te molesto de nuevo."
+
+Idioma: español neutro.
+Prompt 8 — Enviar con Resend
+Crea un módulo src/email/sendEmail.ts usando Resend.
+
+Requisitos:
+1. Leer RESEND_API_KEY y FROM_EMAIL desde .env.
+2. Recibir to, subject, body.
+3. Enviar email.
+4. Guardar status en outreach_messages.
+5. Manejar errores.
+6. No enviar si status ya es "sent".
+7. Agregar modo DRY_RUN=true para que en desarrollo solo imprima el email sin enviarlo.
+Prompt 9 — Crear el workflow completo
+Crea un script src/jobs/runReviewRadar.ts.
+
+Debe ejecutar este flujo:
+
+1. Leer una lista de search queries desde config/targets.json.
+2. Para cada target:
+   - llamar Apify
+   - guardar companies y reviews en Supabase
+   - analizar reviews nuevas con IA
+   - crear señales si corresponde
+   - generar emails para señales con score >= 85
+   - guardar emails como draft
+   - si AUTOPILOT_SEND=true, enviar emails
+3. Mostrar resumen final:
+   - empresas procesadas
+   - reviews nuevas
+   - señales creadas
+   - emails generados
+   - emails enviados
+
+Incluye logs claros y manejo de errores por target para que si falla uno, el resto continúe.
+Prompt 10 — Dashboard simple
+Crea un dashboard Next.js simple para Review Crisis Radar.
+
+Páginas:
+1. /signals
+   - lista señales recientes
+   - filtros por score, ciudad, categoría y status
+   - botón "ver email"
+
+2. /companies/[id]
+   - datos del negocio
+   - reviews recientes
+   - señales
+   - mensajes generados
+
+3. /outreach
+   - emails en draft
+   - botón aprobar
+   - botón marcar como descartado
+
+Usa componentes simples.
+No necesito diseño perfecto, pero sí usable.
+Prompt maestro para mejorar cualquier idea
+
+Cada vez que tengas una idea nueva de señal, usa este prompt conmigo o con Claude:
+
+Tengo esta idea de señal:
+
+[DESCRIBE LA SEÑAL]
+
+Quiero convertirla en un producto MVP de prospección trigger-based.
+
+Analiza:
+1. Qué dolor indica esta señal.
+2. Qué tipo de cliente la tendría.
+3. Qué oferta AI/automatización puedo vender.
+4. Qué datos necesito capturar.
+5. De qué fuentes puedo obtener esos datos.
+6. Qué tan fácil es construirlo de 1 a 10.
+7. Qué tan fuerte es la intención de compra de 1 a 10.
+8. Qué filtros ICP debo aplicar.
+9. Qué mensaje inicial debería enviar.
+10. Qué precio podría cobrar por setup y mensualidad.
+
+Dame una versión práctica, no teórica.
+Email inicial sugerido
+
+Este sería un ejemplo para el primer MVP. Ajusta el tono según el país y el nicho.
+
+Hola {{first_name_or_business_name}},
+
+Vi que recientemente aparecieron algunas reseñas delicadas sobre {{business_name}}, especialmente relacionadas con {{pain_summary}}.
+
+Trabajo ayudando a negocios locales a responder más rápido, recuperar clientes molestos y prevenir que una mala experiencia se convierta en más reseñas negativas.
+
+Podría mostrarte un sistema simple que:
+
+detecta reseñas negativas apenas aparecen,
+prepara respuestas profesionales con IA,
+alerta al equipo,
+y ayuda a pedir reseñas positivas a clientes satisfechos.
+
+No sé si ahora es prioridad para ustedes, pero por lo que vi podría tener sentido revisarlo.
+
+¿Te gustaría que te mande una mini auditoría gratuita de lo que encontré?
+
+Si no tiene sentido, no te molesto de nuevo.
+
+Lo que debes construir primero
+
+No dashboard. No landing page. No 160 señales.
+
+Construye esto en orden:
+
+Semana 1
+Script que trae negocios y reviews.
+Base de datos.
+Detector de reviews negativas.
+Generador de email.
+Tabla de drafts.
+Semana 2
+Dashboard mínimo.
+Botón aprobar email.
+Envío con Resend.
+Tracking manual de respuestas.
+Primeros 100 contactos revisados por ti.
+Semana 3
+Ajustar scoring.
+Mejorar mensajes.
+Probar 2 nichos.
+Intentar cerrar 1–3 beta clients.
+Criterio de éxito
+
+No midas éxito por “el sistema funciona técnicamente”.
+
+Mide esto:
+
+100 señales detectadas
+↓
+50 leads calificados
+↓
+30 emails enviados
+↓
+5 respuestas
+↓
+2 llamadas
+↓
+1 cliente beta
+
+Si eso pasa, tienes algo.
+
+Mi consejo más importante
+
+No construyas “una herramienta de prospección AI”.
+
+Construye una máquina que encuentra dolor visible y ofrece una solución concreta.
+
+Tu primer producto debería decir:
+
+“Detectamos cuando un negocio local empieza a sufrir daño de reputación y le damos una solución AI en menos de 24 horas.”
+
+Eso es mucho más vendible que:
+
+“Hacemos automatizaciones con IA.”

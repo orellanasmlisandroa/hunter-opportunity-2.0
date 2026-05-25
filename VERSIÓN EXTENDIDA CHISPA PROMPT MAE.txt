@@ -1,0 +1,16 @@
+VERSIÓN EXTENDIDA CHISPA PROMPT MAESTRO PARA CLAUDE CODE
+Además de la arquitectura, quiero que prepares una lista de 10 prompts técnicos
+para construir el MVP paso a paso, siguiendo la lógica de La Chispa:
+
+1. Crear estructura del proyecto.
+2. Crear tablas en Supabase.
+3. Conectar Apify.
+4. Guardar companies + reviews sin duplicar.
+5. Analizar reseñas con IA.
+6. Crear señales.
+7. Generar email personalizado.
+8. Enviar email con Resend (modo borrador).
+9. Workflow completo (cron).
+10. Dashboard Next.js.
+
+Cada prompt debe estar listo para pegar en Claude Code.
