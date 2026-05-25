@@ -6,8 +6,31 @@
       "med spa",
       "clínica estética",
       "dentista",
-      "restaurante",
-      "hotel boutique"
+      "veterinaria",
+      "salón de belleza"
+    ],
+    "maxResultsPerCategory": 20
+  },
+  {
+    "city": "Miami",
+    "country": "US",
+    "categories": [
+      "med spa",
+      "dental clinic",
+      "beauty salon",
+      "veterinarian",
+      "car detailing"
+    ],
+    "maxResultsPerCategory": 20
+  },
+  {
+    "city": "Orlando",
+    "country": "US",
+    "categories": [
+      "med spa",
+      "dental clinic",
+      "beauty salon",
+      "veterinarian"
     ],
     "maxResultsPerCategory": 20
   }
