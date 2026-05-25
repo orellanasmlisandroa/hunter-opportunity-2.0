@@ -117,10 +117,10 @@ export default function OutreachPage() {
       </div>
 
       {/* Main Mailbox Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 h-[calc(100vh-230px)]">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:h-[calc(100vh-230px)] h-auto">
         
         {/* Left Side: Drafts Queue */}
-        <div className="lg:col-span-4 flex flex-col bg-slate-950/40 backdrop-blur-xl border border-slate-800/60 rounded-2xl overflow-hidden h-full">
+        <div className="lg:col-span-4 flex flex-col bg-slate-950/40 backdrop-blur-xl border border-slate-800/60 rounded-2xl overflow-hidden lg:h-full h-[380px]">
           
           {/* Search and Count Header */}
           <div className="p-4 border-b border-slate-800/60 bg-slate-900/20 space-y-3">
@@ -182,7 +182,7 @@ export default function OutreachPage() {
         </div>
 
         {/* Right Side: Email Editor Preview */}
-        <div className="lg:col-span-8 bg-slate-950/40 backdrop-blur-xl border border-slate-800/60 rounded-2xl overflow-hidden flex flex-col h-full">
+        <div className="lg:col-span-8 bg-slate-950/40 backdrop-blur-xl border border-slate-800/60 rounded-2xl overflow-hidden flex flex-col lg:h-full h-auto min-h-[500px]">
           {!selected ? (
             <div className="flex-1 flex flex-col items-center justify-center text-slate-600 p-8 space-y-3">
               <svg className="w-12 h-12 text-slate-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
