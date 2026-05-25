@@ -11,6 +11,8 @@ dist/
 
 # Environment variables & secrets (CRITICAL: Never commit keys!)
 .env
+.env.txt
+env.txt
 .env.local
 .env.development.local
 .env.test.local

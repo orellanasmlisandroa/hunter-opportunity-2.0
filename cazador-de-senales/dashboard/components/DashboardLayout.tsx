@@ -9,8 +9,39 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const router = useRouter();
 
   async function handleSignOut() {
-    await supabase.auth.signOut();
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) {
+        console.warn('Global sign out error, trying local sign out:', error);
+        await supabase.auth.signOut({ scope: 'local' });
+      }
+    } catch (err) {
+      console.error('Sign out error catch:', err);
+      try {
+        await supabase.auth.signOut({ scope: 'local' });
+      } catch (localErr) {
+        console.error('Local sign out error:', localErr);
+      }
+    }
+
+    // Force local storage cleanup of Supabase tokens
+    if (typeof window !== 'undefined') {
+      try {
+        const keysToRemove = [];
+        for (let i = 0; i < window.localStorage.length; i++) {
+          const key = window.localStorage.key(i);
+          if (key && key.startsWith('sb-')) {
+            keysToRemove.push(key);
+          }
+        }
+        keysToRemove.forEach(key => window.localStorage.removeItem(key));
+      } catch (storageErr) {
+        console.error('Failed to clear localStorage:', storageErr);
+      }
+    }
+
     router.push('/login');
+    router.refresh();
   }
 
   const isLoginPage = pathname === '/login';
@@ -29,7 +60,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       <div className="fixed inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-teal-950/20 via-[#060814] to-[#060814] pointer-events-none z-0" />
 
       {/* Sidebar */}
-      <aside className="fixed inset-y-0 left-0 w-64 bg-slate-950/60 backdrop-blur-xl border-r border-slate-800/60 flex flex-col justify-between z-10">
+      <aside className="fixed inset-y-0 left-0 w-64 bg-slate-950/60 backdrop-blur-xl border-r border-slate-800/60 flex flex-col justify-between z-20">
         <div className="flex flex-col">
           {/* Logo area */}
           <div className="px-6 py-8 border-b border-slate-800/60 flex items-center gap-3">
