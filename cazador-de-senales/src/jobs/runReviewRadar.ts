@@ -141,7 +141,19 @@ async function processTarget(
 
     if (signal.severityScore < 65) continue;
 
-    // ── 6. Generar email personalizado ─────────────────
+    // ── 6. Obtener datos de madurez digital y generar email personalizado ─────────────────
+    const { data: dbCompany } = await supabase
+      .from('companies')
+      .select('*')
+      .eq('id', companyId)
+      .maybeSingle();
+
+    // Derivar estados si no están explícitamente configurados
+    const webStatus = dbCompany?.website_status || (dbCompany?.website ? 'obsolete' : 'none');
+    const socialStatus = dbCompany?.social_media_status || 'unoptimized';
+    const bookingStatus = dbCompany?.booking_system_status || 'none';
+    const chatbotStatus = dbCompany?.chatbot_status || 'none';
+
     const negativePainType = analyzed.find(r => r.analysis.sentiment === 'negative')?.analysis.painType ?? 'other';
     const excerpts = analyzed
       .filter(r => r.analysis.sentiment === 'negative' && r.text.length > 10)
@@ -156,6 +168,10 @@ async function processTarget(
       painType: negativePainType,
       reviewExcerpts: excerpts,
       offerDescription: 'Sistema de gestión de reseñas y atención al cliente con IA',
+      websiteStatus: webStatus as any,
+      socialMediaStatus: socialStatus as any,
+      bookingSystemStatus: bookingStatus as any,
+      chatbotStatus: chatbotStatus as any,
     });
 
     // ── 7. Guardar como borrador ───────────────────────
