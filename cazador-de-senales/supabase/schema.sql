@@ -15,6 +15,14 @@ CREATE TABLE IF NOT EXISTS companies (
   google_maps_url  text        UNIQUE,
   rating           numeric,
   review_count     integer,
+  -- Nuevos campos de Auditoría de Oportunidades Digitales (Midas)
+  website_status   text        DEFAULT 'none' CHECK (website_status IN ('none', 'obsolete', 'modern')),
+  facebook_url     text,
+  instagram_url    text,
+  tiktok_url       text,
+  social_media_status text     DEFAULT 'unoptimized' CHECK (social_media_status IN ('inactive', 'unoptimized', 'active')),
+  booking_system_status text   DEFAULT 'none' CHECK (booking_system_status IN ('none', 'basic_whatsapp', 'automated')),
+  chatbot_status   text        DEFAULT 'none' CHECK (chatbot_status IN ('none', 'basic', 'advanced_ai')),
   created_at       timestamptz DEFAULT now(),
   updated_at       timestamptz DEFAULT now()
 );

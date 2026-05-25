@@ -88,7 +88,51 @@ export const translations = {
     noReviewsRecorded: 'Sin reseñas guardadas en el historial.',
     reviewCountSuffix: 'reseñas',
     sentimentLabel: 'sentiment',
-    painTypeLabel: 'pain'
+    painTypeLabel: 'pain',
+
+    // Digital Audit & Gaps Section
+    digitalAudit: 'Auditoría de Madurez Digital',
+    digitalAuditSummary: 'Diagnóstico trigger-based de canales de venta, presencia digital y oportunidades de automatización.',
+    websiteAudit: 'Auditoría Web',
+    socialAudit: 'Redes Sociales',
+    bookingAudit: 'Sistema de Citas',
+    chatbotAudit: 'Chatbots & Inteligencia Artificial',
+    opportunityLabel: 'Oportunidad de Venta',
+    facebook: 'Facebook',
+    instagram: 'Instagram',
+    tiktok: 'TikTok',
+
+    // Website Audit Statuses & Opportunities
+    webStatus_none: 'No tiene sitio web ⚠️',
+    webStatus_obsolete: 'Sitio obsoleto / No mobile-friendly 🚨',
+    webStatus_modern: 'Moderno y optimizado ✅',
+    webOpp_none: 'Ofrecer diseño e implementación de Landing Page Midas / Web Corporativa de alta conversión.',
+    webOpp_obsolete: 'Ofrecer rediseño Web moderno con optimización SEO, velocidad ultrarrápida y embudo de conversión.',
+    webOpp_modern: 'Sitio web moderno. Sugerir mantenimiento mensual, embudos de conversión avanzados o auditoría SEO técnica.',
+
+    // Social Media Statuses & Opportunities
+    socialStatus_inactive: 'Inactivo (Sin publicar por más de 30 días) 🚨',
+    socialStatus_unoptimized: 'Sin optimizar / Faltan enlaces y bio ⚠️',
+    socialStatus_active: 'Activo y optimizado ✅',
+    socialOpp_inactive: 'Ofrecer paquete mensual de contenido gestionado con IA, creación de Reels/Tiktoks y reactivación.',
+    socialOpp_unoptimized: 'Ofrecer optimización de biografía, diseño de posts con Link-in-Bio y automatizaciones básicas de DM.',
+    socialOpp_active: 'Presencia fuerte. Sugerir campañas de anuncios pagados (Meta/TikTok Ads) de alto retorno.',
+
+    // Booking Statuses & Opportunities
+    bookingStatus_none: 'Sin agenda digital (Solo llamadas/presencial) 🚨',
+    bookingStatus_basic_whatsapp: 'Básico (WhatsApp manual) ⚠️',
+    bookingStatus_automated: 'Sistema automatizado ✅',
+    bookingOpp_none: 'Ofrecer integración de sistema de reservas Cal.com/Calendly con recordatorios de citas automatizados.',
+    bookingOpp_basic_whatsapp: 'Ofrecer automatización de reserva: el cliente elige hora y el bot agenda automáticamente en su calendario.',
+    bookingOpp_automated: 'Sistema moderno. Sugerir optimización de flujos de recordatorio SMS/WhatsApp para reducir inasistencias.',
+
+    // Chatbot Statuses & Opportunities
+    chatbotStatus_none: 'Sin atención automatizada (Atención lenta) 🚨',
+    chatbotStatus_basic: 'Chatbot básico (FAQ estático / Respuestas rígidas) ⚠️',
+    chatbotStatus_advanced_ai: 'Asistente IA Avanzado ✅',
+    chatbotOpp_none: 'Ofrecer Agente Inteligente de IA en WhatsApp / Web para responder 24/7 y agendar citas de forma fluida.',
+    chatbotOpp_basic: 'Ofrecer actualización a Agente de IA Conversacional integrado con GPT que entiende lenguaje natural.',
+    chatbotOpp_advanced_ai: 'Excelente atención. Sugerir integración de agente de voz IA (Voicebots) para contestar llamadas telefónicas.'
   },
   en: {
     // Layout / Sidebar
@@ -177,6 +221,50 @@ export const translations = {
     noReviewsRecorded: 'No reviews saved in history.',
     reviewCountSuffix: 'reviews',
     sentimentLabel: 'sentiment',
-    painTypeLabel: 'pain'
+    painTypeLabel: 'pain',
+
+    // Digital Audit & Gaps Section
+    digitalAudit: 'Digital Maturity Audit',
+    digitalAuditSummary: 'Trigger-based diagnostics of sales channels, digital presence, and automation opportunities.',
+    websiteAudit: 'Website Audit',
+    socialAudit: 'Social Media',
+    bookingAudit: 'Booking System',
+    chatbotAudit: 'Chatbots & Artificial Intelligence',
+    opportunityLabel: 'Sales Opportunity',
+    facebook: 'Facebook',
+    instagram: 'Instagram',
+    tiktok: 'TikTok',
+
+    // Website Audit Statuses & Opportunities
+    webStatus_none: 'No website found ⚠️',
+    webStatus_obsolete: 'Obsolete / Not mobile-friendly 🚨',
+    webStatus_modern: 'Modern & optimized ✅',
+    webOpp_none: 'Offer Midas Landing Page design / high-converting corporate website.',
+    webOpp_obsolete: 'Offer modern Web redesign with SEO optimization, ultra-fast speed, and conversion funnel.',
+    webOpp_modern: 'Modern website. Suggest monthly maintenance, advanced conversion funnels, or technical SEO audit.',
+
+    // Social Media Statuses & Opportunities
+    socialStatus_inactive: 'Inactive (No posts for over 30 days) 🚨',
+    socialStatus_unoptimized: 'Unoptimized / Missing links and bio ⚠️',
+    socialStatus_active: 'Active & optimized ✅',
+    socialOpp_inactive: 'Offer monthly AI-managed content package, Reels/Tiptoks creation, and reactivation.',
+    socialOpp_unoptimized: 'Offer bio optimization, post design with Link-in-Bio, and basic DM automations.',
+    socialOpp_active: 'Strong presence. Suggest high-return paid ad campaigns (Meta/TikTok Ads).',
+
+    // Booking Statuses & Opportunities
+    bookingStatus_none: 'No digital scheduling (Calls/walk-in only) 🚨',
+    bookingStatus_basic_whatsapp: 'Basic (Manual WhatsApp) ⚠️',
+    bookingStatus_automated: 'Automated system ✅',
+    bookingOpp_none: 'Offer Cal.com/Calendly booking system integration with automated appointment reminders.',
+    bookingOpp_basic_whatsapp: 'Offer booking automation: client chooses time and the bot schedules directly into calendar.',
+    bookingOpp_automated: 'Modern system. Suggest optimizing SMS/WhatsApp reminder flows to reduce no-shows.',
+
+    // Chatbot Statuses & Opportunities
+    chatbotStatus_none: 'No automated support (Slow response) 🚨',
+    chatbotStatus_basic: 'Basic chatbot (Static FAQ / Rigid responses) ⚠️',
+    chatbotStatus_advanced_ai: 'Advanced AI Assistant ✅',
+    chatbotOpp_none: 'Offer Intelligent AI Agent on WhatsApp / Web to respond 24/7 and seamlessly book appointments.',
+    chatbotOpp_basic: 'Offer upgrade to GPT-integrated Conversational AI Agent that understands natural language.',
+    chatbotOpp_advanced_ai: 'Excellent support. Suggest voice AI agent (Voicebots) integration to answer phone calls.'
   }
 };

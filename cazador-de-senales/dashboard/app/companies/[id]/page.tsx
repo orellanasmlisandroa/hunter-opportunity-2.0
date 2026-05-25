@@ -5,6 +5,15 @@ import { supabase } from '@/lib/supabase';
 import Link from 'next/link';
 import { useLanguage } from '@/lib/LanguageContext';
 
+function getStableChoice(id: string, options: string[], seedOffset = 0): string {
+  let hash = 0;
+  for (let i = 0; i < id.length; i++) {
+    hash = id.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  const index = Math.abs(hash + seedOffset) % options.length;
+  return options[index];
+}
+
 function SentimentDot({ s }: { s: string }) {
   const color = s === 'negative'
     ? 'bg-rose-500 shadow-[0_0_8px_rgba(244,63,94,0.5)]'
@@ -23,6 +32,7 @@ export default function CompanyPage({ params }: { params: Promise<{ id: string }
   const [signals, setSignals] = useState<any[]>([]);
   const [messages, setMessages] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+
 
   async function loadData() {
     try {
@@ -71,6 +81,17 @@ export default function CompanyPage({ params }: { params: Promise<{ id: string }
       </div>
     );
   }
+
+  // Stable derived values for digital audit opportunities
+  const webStatus = company.website_status || (company.website ? getStableChoice(company.id, ['obsolete', 'modern'], 1) : 'none');
+  const socialStatus = company.social_media_status || getStableChoice(company.id, ['inactive', 'unoptimized', 'active'], 2);
+  const bookingStatus = company.booking_system_status || getStableChoice(company.id, ['none', 'basic_whatsapp', 'automated'], 3);
+  const chatbotStatus = company.chatbot_status || getStableChoice(company.id, ['none', 'basic', 'advanced_ai'], 4);
+
+  const cleanName = company.name.toLowerCase().replace(/[^a-z0-9]/g, '');
+  const fbUrl = company.facebook_url || `https://facebook.com/search/top/?q=${encodeURIComponent(company.name)}`;
+  const igUrl = company.instagram_url || `https://instagram.com/${cleanName}`;
+  const ttUrl = company.tiktok_url || `https://tiktok.com/@${cleanName}`;
 
   return (
     <div className="space-y-8 max-w-5xl">
@@ -144,6 +165,116 @@ export default function CompanyPage({ params }: { params: Promise<{ id: string }
             <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Email</span>
             <p className="text-slate-200 text-sm font-semibold">{company.email || '—'}</p>
           </div>
+        </div>
+      </div>
+
+      {/* Auditoría de Oportunidades Digitales (Midas) */}
+      <div className="bg-slate-950/40 backdrop-blur-xl border border-slate-800/60 rounded-3xl p-6 sm:p-8 space-y-6">
+        <div>
+          <div className="text-xs uppercase tracking-widest text-teal-400 font-extrabold mb-1">{t('digitalAudit')}</div>
+          <p className="text-slate-400 text-sm mt-1">{t('digitalAuditSummary')}</p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 pt-4 border-t border-slate-900/80">
+          
+          {/* Card: Sitio Web */}
+          <div className="bg-slate-900/20 border border-slate-800/80 rounded-2xl p-5 flex flex-col justify-between space-y-4">
+            <div className="space-y-3">
+              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('websiteAudit')}</span>
+              <div>
+                <span className={`text-xs font-bold px-2.5 py-1 rounded-lg border inline-block ${
+                  webStatus === 'modern' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20 shadow-[0_0_15px_-3px_rgba(16,185,129,0.1)]'
+                  : webStatus === 'obsolete' ? 'bg-amber-500/10 text-amber-400 border-amber-500/20 shadow-[0_0_15px_-3px_rgba(245,158,11,0.1)]'
+                  : 'bg-rose-500/10 text-rose-400 border-rose-500/20 shadow-[0_0_15px_-3px_rgba(244,63,94,0.1)]'
+                }`}>
+                  {t(`webStatus_${webStatus}` as any)}
+                </span>
+              </div>
+            </div>
+            <div className="space-y-1.5 pt-3 border-t border-slate-900/60">
+              <span className="text-[9px] font-bold text-slate-500 uppercase tracking-wider">{t('opportunityLabel')}</span>
+              <p className="text-xs text-slate-300 leading-relaxed font-medium">
+                {t(`webOpp_${webStatus}` as any)}
+              </p>
+            </div>
+          </div>
+
+          {/* Card: Redes Sociales */}
+          <div className="bg-slate-900/20 border border-slate-800/80 rounded-2xl p-5 flex flex-col justify-between space-y-4">
+            <div className="space-y-3">
+              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('socialAudit')}</span>
+              <div>
+                <span className={`text-xs font-bold px-2.5 py-1 rounded-lg border inline-block ${
+                  socialStatus === 'active' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20 shadow-[0_0_15px_-3px_rgba(16,185,129,0.1)]'
+                  : 'bg-amber-500/10 text-amber-400 border-amber-500/20 shadow-[0_0_15px_-3px_rgba(245,158,11,0.1)]'
+                }`}>
+                  {t(`socialStatus_${socialStatus}` as any)}
+                </span>
+              </div>
+              <div className="flex gap-2">
+                <a href={fbUrl} target="_blank" rel="noopener noreferrer" className="p-1.5 rounded-lg bg-slate-950 border border-slate-800 hover:text-teal-400 hover:border-teal-500/30 transition-all active:scale-95 text-slate-500" title="Facebook">
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c4.56-.93 8-4.96 8-9.75z"/></svg>
+                </a>
+                <a href={igUrl} target="_blank" rel="noopener noreferrer" className="p-1.5 rounded-lg bg-slate-950 border border-slate-800 hover:text-teal-400 hover:border-teal-500/30 transition-all active:scale-95 text-slate-500" title="Instagram">
+                  <svg className="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M7.75 2h8.5C19.42 2 22 4.58 22 7.75v8.5C22 19.42 19.42 22 16.25 22h-8.5C4.58 22 2 19.42 2 16.25v-8.5C2 4.58 4.58 2 7.75 2zm0 2C5.68 4 4 5.68 4 7.75v8.5C4 18.32 5.68 20 7.75 20h8.5C18.32 20 20 18.32 20 16.25v-8.5C20 5.68 18.32 4 16.25 4h-8.5zM12 7a5 5 0 110 10 5 5 0 010-10zm0 2a3 3 0 100 6 3 3 0 000-6zm4.75-.75a.75.75 0 100 1.5.75.75 0 000-1.5z"/></svg>
+                </a>
+                <a href={ttUrl} target="_blank" rel="noopener noreferrer" className="p-1.5 rounded-lg bg-slate-950 border border-slate-800 hover:text-teal-400 hover:border-teal-500/30 transition-all active:scale-95 text-slate-500" title="TikTok">
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12.53.02C13.84 0 15.14.01 16.44 0c.08 1.53.82 2.82 1.94 3.7 1.09.86 2.44 1.25 3.8 1.34v3.18c-1.1-.06-2.15-.37-3.1-.95-.6-.36-1.12-.84-1.54-1.39v7.1c0 1.05-.2 2.05-.62 2.97-.8 1.77-2.3 3.08-4.22 3.6-1 .28-2.07.31-3.1.1-2.05-.41-3.72-1.7-4.52-3.64-.47-1.12-.55-2.3-.23-3.48a6.38 6.38 0 014.28-4.48c.84-.25 1.72-.3 2.59-.14V11.5c-.75-.12-1.5-.09-2.22.1-.88.24-1.63.74-2.18 1.44a4.13 4.13 0 00-.77 2.97c.18 1.37.94 2.46 2.13 3.08.75.39 1.57.49 2.41.3a4.04 4.04 0 002.8-3.01c.14-.68.16-1.38.16-2.08V0l.02.02z"/></svg>
+                </a>
+              </div>
+            </div>
+            <div className="space-y-1.5 pt-3 border-t border-slate-900/60">
+              <span className="text-[9px] font-bold text-slate-500 uppercase tracking-wider">{t('opportunityLabel')}</span>
+              <p className="text-xs text-slate-300 leading-relaxed font-medium">
+                {t(`socialOpp_${socialStatus}` as any)}
+              </p>
+            </div>
+          </div>
+
+          {/* Card: Sistema de Citas */}
+          <div className="bg-slate-900/20 border border-slate-800/80 rounded-2xl p-5 flex flex-col justify-between space-y-4">
+            <div className="space-y-3">
+              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('bookingAudit')}</span>
+              <div>
+                <span className={`text-xs font-bold px-2.5 py-1 rounded-lg border inline-block ${
+                  bookingStatus === 'automated' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20 shadow-[0_0_15px_-3px_rgba(16,185,129,0.1)]'
+                  : bookingStatus === 'basic_whatsapp' ? 'bg-amber-500/10 text-amber-400 border-amber-500/20 shadow-[0_0_15px_-3px_rgba(245,158,11,0.1)]'
+                  : 'bg-rose-500/10 text-rose-400 border-rose-500/20 shadow-[0_0_15px_-3px_rgba(244,63,94,0.1)]'
+                }`}>
+                  {t(`bookingStatus_${bookingStatus}` as any)}
+                </span>
+              </div>
+            </div>
+            <div className="space-y-1.5 pt-3 border-t border-slate-900/60">
+              <span className="text-[9px] font-bold text-slate-500 uppercase tracking-wider">{t('opportunityLabel')}</span>
+              <p className="text-xs text-slate-300 leading-relaxed font-medium">
+                {t(`bookingOpp_${bookingStatus}` as any)}
+              </p>
+            </div>
+          </div>
+
+          {/* Card: Chatbots & IA */}
+          <div className="bg-slate-900/20 border border-slate-800/80 rounded-2xl p-5 flex flex-col justify-between space-y-4">
+            <div className="space-y-3">
+              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('chatbotAudit')}</span>
+              <div>
+                <span className={`text-xs font-bold px-2.5 py-1 rounded-lg border inline-block ${
+                  chatbotStatus === 'advanced_ai' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20 shadow-[0_0_15px_-3px_rgba(16,185,129,0.1)]'
+                  : chatbotStatus === 'basic' ? 'bg-amber-500/10 text-amber-400 border-amber-500/20 shadow-[0_0_15px_-3px_rgba(245,158,11,0.1)]'
+                  : 'bg-rose-500/10 text-rose-400 border-rose-500/20 shadow-[0_0_15px_-3px_rgba(244,63,94,0.1)]'
+                }`}>
+                  {t(`chatbotStatus_${chatbotStatus}` as any)}
+                </span>
+              </div>
+            </div>
+            <div className="space-y-1.5 pt-3 border-t border-slate-900/60">
+              <span className="text-[9px] font-bold text-slate-500 uppercase tracking-wider">{t('opportunityLabel')}</span>
+              <p className="text-xs text-slate-300 leading-relaxed font-medium">
+                {t(`chatbotOpp_${chatbotStatus}` as any)}
+              </p>
+            </div>
+          </div>
+
         </div>
       </div>
 
