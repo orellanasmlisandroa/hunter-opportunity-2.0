@@ -4,11 +4,13 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
+import { useLanguage } from '@/lib/LanguageContext';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { language, toggleLanguage, t } = useLanguage();
 
   async function handleSignOut() {
     try {
@@ -91,7 +93,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             <svg className="w-5 h-5 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
               <path strokeLinecap="round" strokeLinejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 002 2h2a2 2 0 002-2z" />
             </svg>
-            <span>Señales</span>
+            <span>{t('signals')}</span>
           </Link>
 
           <Link
@@ -102,35 +104,47 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             <svg className="w-5 h-5 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
               <path strokeLinecap="round" strokeLinejoin="round" d="M3 19v-8.93a2 2 0 01.89-1.664l8-5.333a2 2 0 012.22 0l8 5.333A2 2 0 0121 10.07V19M3 19a2 2 0 002 2h14a2 2 0 002-2M3 19l6.75-4.5M21 19l-6.75-4.5M3 10l6.75 4.5M21 10l-6.75 4.5m0 0l-2.25-1.5a2 2 0 00-2.22 0l-2.25 1.5" />
             </svg>
-            <span>Outreach</span>
+            <span>{t('outreach')}</span>
           </Link>
         </nav>
       </div>
 
       {/* Footer info & Logout */}
-      <div className="p-4 border-t border-slate-800/60 bg-slate-950/40 flex flex-col gap-3">
+      <div className="p-4 border-t border-slate-800/60 bg-slate-950/40 flex flex-col gap-2.5">
         {/* Sign Out Button */}
         <button
           onClick={() => {
             if (onClose) onClose();
             handleSignOut();
           }}
-          className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-slate-500 hover:text-rose-400 hover:bg-rose-500/5 hover:border hover:border-rose-500/10 border border-transparent transition-all duration-200 font-semibold text-xs text-left w-full"
+          className="flex items-center gap-3 px-4 py-2 rounded-xl text-slate-500 hover:text-rose-400 hover:bg-rose-500/5 hover:border hover:border-rose-500/10 border border-transparent transition-all duration-200 font-semibold text-xs text-left w-full"
         >
           <svg className="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
             <path strokeLinecap="round" strokeLinejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
           </svg>
-          Cerrar sesión
+          {t('signOut')}
         </button>
+
+        {/* Language Switcher */}
+        <div className="flex items-center justify-between px-3 py-1.5 bg-slate-900/40 rounded-xl border border-slate-800/80">
+          <span className="text-[9px] uppercase tracking-widest text-slate-500 font-bold">Language</span>
+          <button
+            onClick={toggleLanguage}
+            className="flex items-center gap-1 text-[10px] font-black text-teal-400 hover:text-teal-300 transition-colors bg-slate-950/80 px-2 py-0.5 rounded-md border border-slate-800/80 active:scale-95 cursor-pointer"
+          >
+            {language === 'es' ? '🇪🇸 ES' : '🇺🇸 EN'}
+          </button>
+        </div>
         
-        <div className="flex items-center justify-between px-3 py-2 bg-slate-900/80 rounded-xl border border-slate-800/80">
-          <span className="text-[10px] uppercase tracking-widest text-slate-500 font-bold">Estado</span>
+        <div className="flex items-center justify-between px-3 py-1.5 bg-slate-900/80 rounded-xl border border-slate-800/80">
+          <span className="text-[10px] uppercase tracking-widest text-slate-500 font-bold">{t('status')}</span>
           <span className="flex items-center gap-1.5 text-xs text-teal-400 font-semibold">
             <span className="w-1.5 h-1.5 rounded-full bg-teal-400 animate-pulse" />
-            Live Radar
+            {t('liveRadar')}
           </span>
         </div>
       </div>
+
     </div>
   );
 

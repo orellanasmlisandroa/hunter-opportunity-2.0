@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
+import { useLanguage } from '@/lib/LanguageContext';
 
 type Draft = {
   id: string;
@@ -26,6 +27,8 @@ function ScoreChip({ score }: { score: number }) {
 }
 
 export default function OutreachPage() {
+  const { t } = useLanguage();
+
   const [drafts, setDrafts] = useState<Draft[]>([]);
   const [selected, setSelected] = useState<Draft | null>(null);
   const [loading, setLoading] = useState(true);
@@ -57,7 +60,7 @@ export default function OutreachPage() {
 
   async function updateStatus(id: string, status: string) {
     await supabase.from('outreach_messages').update({ status }).eq('id', id);
-    setActionMsg(status === 'approved' ? '✅ Borrador aprobado para envío' : '🗑️ Borrador descartado');
+    setActionMsg(status === 'approved' ? t('actionApproved') : t('actionDiscarded'));
     
     // Animate item removal
     setDrafts(prev => prev.filter(d => d.id !== id));
@@ -91,7 +94,6 @@ export default function OutreachPage() {
     return (
       <div className="flex-1 flex flex-col items-center justify-center py-24 space-y-4">
         <div className="w-8 h-8 rounded-full border-2 border-teal-500/25 border-t-teal-500 animate-spin" />
-        <span className="text-slate-500 text-sm font-semibold tracking-wide uppercase">Cargando bandeja de salida...</span>
       </div>
     );
   }
@@ -101,12 +103,12 @@ export default function OutreachPage() {
       {/* Title Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <div className="text-xs uppercase tracking-widest text-teal-400 font-extrabold mb-1">Outreach Inbox</div>
+          <div className="text-xs uppercase tracking-widest text-teal-400 font-extrabold mb-1">{t('outreachInbox')}</div>
           <h1 className="text-3xl font-extrabold tracking-tight text-white">
-            Bandeja de Aprobación
+            {t('approvalInboxTitle')}
           </h1>
           <p className="text-slate-400 text-sm mt-1">
-            Revisa, edita o aprueba los emails redactados por la IA en base a las señales del radar.
+            {t('outreachSummary')}
           </p>
         </div>
         {actionMsg && (
@@ -125,7 +127,7 @@ export default function OutreachPage() {
           {/* Search and Count Header */}
           <div className="p-4 border-b border-slate-800/60 bg-slate-900/20 space-y-3">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Pendientes de revisión</span>
+              <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">{t('pendingReview')}</span>
               <span className="px-2 py-0.5 text-[10px] font-extrabold bg-teal-500/10 text-teal-400 border border-teal-500/20 rounded-full">
                 {drafts.length}
               </span>
@@ -134,7 +136,7 @@ export default function OutreachPage() {
             <div className="relative">
               <input
                 type="text"
-                placeholder="Buscar negocio..."
+                placeholder={t('searchBusiness')}
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
                 className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-9 pr-4 py-2 text-xs text-white focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition-all placeholder:text-slate-600"
@@ -152,8 +154,8 @@ export default function OutreachPage() {
                 <svg className="w-10 h-10 text-slate-800 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M3 19v-8.93a2 2 0 01.89-1.664l8-5.333a2 2 0 012.22 0l8 5.333A2 2 0 0121 10.07V19M3 19a2 2 0 002 2h14a2 2 0 002-2" />
                 </svg>
-                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Bandeja Vacía</p>
-                <p className="text-[11px] text-slate-600">No hay borradores pendientes con los filtros actuales.</p>
+                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">{t('emptyTitle')}</p>
+                <p className="text-[11px] text-slate-600">{t('emptySubtitle')}</p>
               </div>
             ) : (
               filteredDrafts.map(d => (
@@ -188,8 +190,8 @@ export default function OutreachPage() {
               <svg className="w-12 h-12 text-slate-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
               </svg>
-              <p className="font-semibold text-slate-500 uppercase text-xs tracking-wider">Sin borrador seleccionado</p>
-              <p className="text-xs text-slate-600">Elige un borrador de la bandeja izquierda para ver los detalles.</p>
+              <p className="font-semibold text-slate-500 uppercase text-xs tracking-wider">{t('noSelectedTitle')}</p>
+              <p className="text-xs text-slate-600">{t('noSelectedSubtitle')}</p>
             </div>
           ) : (
             <>
@@ -211,7 +213,7 @@ export default function OutreachPage() {
                   <div className="mt-4 bg-rose-500/[0.03] border border-rose-500/10 rounded-xl p-3 flex gap-2.5">
                     <span className="text-xs select-none">🚨</span>
                     <p className="text-xs text-rose-300/80 leading-relaxed">
-                      <strong className="text-rose-400">Señal de crisis:</strong> {selected.signals.signal_summary}
+                      <strong className="text-rose-400">{t('crisisSignalLabel')}</strong> {selected.signals.signal_summary}
                     </p>
                   </div>
                 )}
@@ -223,7 +225,7 @@ export default function OutreachPage() {
                 {/* Meta details */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pb-4 border-b border-slate-900/80">
                   <div className="space-y-1">
-                    <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Para (Contacto)</span>
+                    <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('toContactLabel')}</span>
                     <p className="text-slate-200 text-sm font-semibold flex items-center gap-1.5">
                       {selected.companies?.email ? (
                         <>
@@ -233,25 +235,25 @@ export default function OutreachPage() {
                       ) : (
                         <>
                           <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
-                          <span className="text-amber-500 font-semibold">Sin email registrado</span>
+                          <span className="text-amber-500 font-semibold">{t('noEmailRegistered')}</span>
                         </>
                       )}
                     </p>
                   </div>
                   <div className="space-y-1">
-                    <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Canal</span>
+                    <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('channelLabel')}</span>
                     <p className="text-slate-300 text-sm font-semibold flex items-center gap-1.5">
                       <svg className="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                       </svg>
-                      Email Directo
+                      {t('directEmail')}
                     </p>
                   </div>
                 </div>
 
                 {/* Subject field */}
                 <div className="space-y-2">
-                  <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Asunto</span>
+                  <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('subjectLabel')}</span>
                   <div className="bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-slate-200 text-sm font-bold">
                     {selected.subject}
                   </div>
@@ -259,7 +261,7 @@ export default function OutreachPage() {
 
                 {/* Body field */}
                 <div className="space-y-2">
-                  <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Cuerpo del Correo</span>
+                  <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('bodyLabel')}</span>
                   <div className="bg-slate-950/80 border border-slate-800/80 rounded-2xl p-5 text-slate-200 text-sm font-medium leading-relaxed whitespace-pre-wrap font-sans">
                     {selected.body}
                   </div>
@@ -272,13 +274,13 @@ export default function OutreachPage() {
                   onClick={() => updateStatus(selected.id, 'approved')}
                   className="flex-1 bg-gradient-to-r from-teal-500 to-emerald-500 hover:from-teal-400 hover:to-emerald-400 text-slate-950 font-extrabold text-sm py-3.5 rounded-xl shadow-lg shadow-teal-500/10 transition-all duration-200 active:scale-[0.98]"
                 >
-                  ✅ Aprobar para Envío
+                  ✅ {t('approveButton')}
                 </button>
                 <button
                   onClick={() => updateStatus(selected.id, 'discarded')}
                   className="flex-1 border border-slate-800 hover:bg-slate-900/60 text-slate-300 font-bold text-sm py-3.5 rounded-xl transition-all duration-200 active:scale-[0.98]"
                 >
-                  🗑️ Descartar
+                  🗑️ {t('discardButton')}
                 </button>
               </div>
             </>

@@ -3,12 +3,14 @@
 import { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
+import { useLanguage } from '@/lib/LanguageContext';
 
 export default function AuthGuard({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   const pathname = usePathname();
+  const { t } = useLanguage();
 
   useEffect(() => {
     // Verificar sesión inicial
@@ -48,7 +50,7 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-teal-950/20 via-[#060814] to-[#060814] pointer-events-none" />
         <div className="w-10 h-10 rounded-full border-2 border-teal-500/25 border-t-teal-500 animate-spin" />
         <span className="text-slate-500 text-xs font-bold tracking-widest uppercase select-none animate-pulse">
-          Autenticando Radar...
+          {t('authenticating')}
         </span>
       </div>
     );

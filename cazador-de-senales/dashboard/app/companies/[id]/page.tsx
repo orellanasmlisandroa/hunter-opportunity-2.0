@@ -1,6 +1,9 @@
+'use client';
+
+import { useEffect, useState, use } from 'react';
 import { supabase } from '@/lib/supabase';
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
+import { useLanguage } from '@/lib/LanguageContext';
 
 function SentimentDot({ s }: { s: string }) {
   const color = s === 'negative'
@@ -11,18 +14,63 @@ function SentimentDot({ s }: { s: string }) {
   return <span className={`inline-block w-2 h-2 rounded-full ${color} mr-1.5`} />;
 }
 
-export default async function CompanyPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
+export default function CompanyPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = use(params);
+  const { t, language } = useLanguage();
 
-  const [{ data: company }, { data: reviews }, { data: signals }, { data: messages }] =
-    await Promise.all([
-      supabase.from('companies').select('*').eq('id', id).single(),
-      supabase.from('reviews').select('*').eq('company_id', id).order('review_date', { ascending: false }).limit(20),
-      supabase.from('signals').select('*').eq('company_id', id).order('detected_at', { ascending: false }),
-      supabase.from('outreach_messages').select('*').eq('company_id', id).order('id', { ascending: false }),
-    ]);
+  const [company, setCompany] = useState<any>(null);
+  const [reviews, setReviews] = useState<any[]>([]);
+  const [signals, setSignals] = useState<any[]>([]);
+  const [messages, setMessages] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  if (!company) notFound();
+  async function loadData() {
+    try {
+      const [
+        { data: companyData },
+        { data: reviewsData },
+        { data: signalsData },
+        { data: messagesData }
+      ] = await Promise.all([
+        supabase.from('companies').select('*').eq('id', id).single(),
+        supabase.from('reviews').select('*').eq('company_id', id).order('review_date', { ascending: false }).limit(20),
+        supabase.from('signals').select('*').eq('company_id', id).order('detected_at', { ascending: false }),
+        supabase.from('outreach_messages').select('*').eq('company_id', id).order('id', { ascending: false }),
+      ]);
+
+      setCompany(companyData);
+      setReviews(reviewsData ?? []);
+      setSignals(signalsData ?? []);
+      setMessages(messagesData ?? []);
+    } catch (err) {
+      console.error('Error loading company data:', err);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    loadData();
+  }, [id]);
+
+  if (loading) {
+    return (
+      <div className="flex-1 flex flex-col items-center justify-center py-28">
+        <div className="w-8 h-8 rounded-full border-2 border-teal-500/25 border-t-teal-500 animate-spin" />
+      </div>
+    );
+  }
+
+  if (!company) {
+    return (
+      <div className="text-center py-20 text-slate-500">
+        <p className="font-semibold text-lg">404 · Negocio no encontrado</p>
+        <Link href="/signals" className="text-teal-400 hover:underline mt-4 inline-block font-bold">
+          {t('backToSignals')}
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-8 max-w-5xl">
@@ -35,7 +83,7 @@ export default async function CompanyPage({ params }: { params: Promise<{ id: st
           <svg className="w-4 h-4 transform group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 19l-7-7 7-7" />
           </svg>
-          Volver a señales
+          {t('backToSignals')}
         </Link>
       </div>
 
@@ -62,7 +110,7 @@ export default async function CompanyPage({ params }: { params: Promise<{ id: st
               <div className="text-2xl font-black text-amber-400 flex items-center gap-1.5 justify-end">
                 ⭐ {Number(company.rating).toFixed(1)}
               </div>
-              <div className="text-slate-500 text-[10px] font-bold uppercase tracking-wider mt-0.5">{company.review_count} reseñas</div>
+              <div className="text-slate-500 text-[10px] font-bold uppercase tracking-wider mt-0.5">{company.review_count} {t('reviewCountSuffix')}</div>
             </div>
           </div>
         </div>
@@ -70,7 +118,7 @@ export default async function CompanyPage({ params }: { params: Promise<{ id: st
         {/* Contact info grid */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-8 pt-6 border-t border-slate-900/80">
           <div className="space-y-1">
-            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Sitio Web</span>
+            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('websiteLabel')}</span>
             <div className="text-sm">
               {company.website ? (
                 <a
@@ -88,7 +136,7 @@ export default async function CompanyPage({ params }: { params: Promise<{ id: st
           </div>
           
           <div className="space-y-1">
-            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Teléfono</span>
+            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('phoneLabel')}</span>
             <p className="text-slate-200 text-sm font-semibold">{company.phone || '—'}</p>
           </div>
           
@@ -104,17 +152,17 @@ export default async function CompanyPage({ params }: { params: Promise<{ id: st
         {/* Señales */}
         <div className="bg-slate-950/40 backdrop-blur-xl border border-slate-800/60 rounded-3xl p-6">
           <div className="flex items-center justify-between mb-6 pb-4 border-b border-slate-900/80">
-            <h2 className="font-extrabold text-white text-base tracking-tight">Registro de Señales</h2>
+            <h2 className="font-extrabold text-white text-base tracking-tight">{t('signalHistory')}</h2>
             <span className="px-2 py-0.5 text-[10px] font-extrabold bg-slate-800 text-slate-400 rounded-full">
-              {signals?.length ?? 0}
+              {signals.length}
             </span>
           </div>
 
-          {(signals ?? []).length === 0 ? (
-            <p className="text-slate-600 text-xs py-10 text-center">Sin señales de radar registradas.</p>
+          {signals.length === 0 ? (
+            <p className="text-slate-600 text-xs py-10 text-center">{t('noSignalsRecorded')}</p>
           ) : (
             <div className="space-y-4">
-              {(signals ?? []).map(s => (
+              {signals.map(s => (
                 <div key={s.id} className="p-4 bg-slate-950/60 border border-slate-900 rounded-2xl space-y-2">
                   <div className="flex items-center justify-between gap-4">
                     <span className={`text-[10px] font-black tracking-wider px-2 py-0.5 rounded-md border ${
@@ -132,7 +180,7 @@ export default async function CompanyPage({ params }: { params: Promise<{ id: st
                   
                   <div className="text-[10px] text-slate-600 font-bold uppercase tracking-wider pt-1 border-t border-slate-900/60 flex items-center justify-between">
                     <span>Tipo: {s.signal_type}</span>
-                    <span>{new Date(s.detected_at).toLocaleDateString('es', { day: '2-digit', month: 'short', year: 'numeric' })}</span>
+                    <span>{new Date(s.detected_at).toLocaleDateString(language === 'es' ? 'es-ES' : 'en-US', { day: '2-digit', month: 'short', year: 'numeric' })}</span>
                   </div>
                 </div>
               ))}
@@ -143,17 +191,17 @@ export default async function CompanyPage({ params }: { params: Promise<{ id: st
         {/* Mensajes */}
         <div className="bg-slate-950/40 backdrop-blur-xl border border-slate-800/60 rounded-3xl p-6">
           <div className="flex items-center justify-between mb-6 pb-4 border-b border-slate-900/80">
-            <h2 className="font-extrabold text-white text-base tracking-tight">Historial de Outreach</h2>
+            <h2 className="font-extrabold text-white text-base tracking-tight">{t('outreachHistory')}</h2>
             <span className="px-2 py-0.5 text-[10px] font-extrabold bg-slate-800 text-slate-400 rounded-full">
-              {messages?.length ?? 0}
+              {messages.length}
             </span>
           </div>
 
-          {(messages ?? []).length === 0 ? (
-            <p className="text-slate-600 text-xs py-10 text-center">Sin borradores ni mensajes generados.</p>
+          {messages.length === 0 ? (
+            <p className="text-slate-600 text-xs py-10 text-center">{t('noOutreachRecorded')}</p>
           ) : (
             <div className="space-y-4">
-              {(messages ?? []).map(m => (
+              {messages.map(m => (
                 <div key={m.id} className="p-4 bg-slate-950/60 border border-slate-900 rounded-2xl space-y-2">
                   <div className="flex items-center justify-between">
                     <span className={`text-[10px] font-black tracking-widest uppercase px-2.5 py-0.5 rounded-full border ${
@@ -176,17 +224,17 @@ export default async function CompanyPage({ params }: { params: Promise<{ id: st
       {/* Reviews */}
       <div className="bg-slate-950/40 backdrop-blur-xl border border-slate-800/60 rounded-3xl p-6 sm:p-8">
         <div className="flex items-center justify-between mb-8 pb-4 border-b border-slate-900/80">
-          <h2 className="font-extrabold text-white text-base tracking-tight">Reseñas Recientes</h2>
+          <h2 className="font-extrabold text-white text-base tracking-tight">{t('recentReviews')}</h2>
           <span className="px-2 py-0.5 text-[10px] font-extrabold bg-slate-800 text-slate-400 rounded-full">
-            {reviews?.length ?? 0}
+            {reviews.length}
           </span>
         </div>
 
-        {(reviews ?? []).length === 0 ? (
-          <p className="text-slate-600 text-xs py-10 text-center">Sin reseñas guardadas en el historial.</p>
+        {reviews.length === 0 ? (
+          <p className="text-slate-600 text-xs py-10 text-center">{t('noReviewsRecorded')}</p>
         ) : (
           <div className="space-y-6">
-            {(reviews ?? []).map(r => (
+            {reviews.map(r => (
               <div key={r.id} className="pb-6 border-b border-slate-900/60 last:pb-0 last:border-b-0 space-y-2">
                 <div className="flex flex-col sm:flex-row sm:items-center gap-3">
                   <div className="flex items-center gap-1.5">
@@ -210,7 +258,7 @@ export default async function CompanyPage({ params }: { params: Promise<{ id: st
                   </div>
 
                   <span className="text-slate-600 text-xs font-bold sm:ml-auto">
-                    {r.review_date ? new Date(r.review_date).toLocaleDateString('es', { day: '2-digit', month: 'short', year: 'numeric' }) : ''}
+                    {r.review_date ? new Date(r.review_date).toLocaleDateString(language === 'es' ? 'es-ES' : 'en-US', { day: '2-digit', month: 'short', year: 'numeric' }) : ''}
                   </span>
                 </div>
                 

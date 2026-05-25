@@ -3,6 +3,7 @@ import './globals.css';
 import { Outfit } from 'next/font/google';
 import AuthGuard from '@/components/AuthGuard';
 import DashboardLayout from '@/components/DashboardLayout';
+import { LanguageProvider } from '@/lib/LanguageContext';
 
 const outfit = Outfit({
   subsets: ['latin'],
@@ -19,11 +20,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="es" className="h-full">
       <body className={`${outfit.className} bg-[#060814] text-slate-100 min-h-screen antialiased selection:bg-teal-500 selection:text-[#060814]`}>
-        <AuthGuard>
-          <DashboardLayout>
-            {children}
-          </DashboardLayout>
-        </AuthGuard>
+        <LanguageProvider>
+          <AuthGuard>
+            <DashboardLayout>
+              {children}
+            </DashboardLayout>
+          </AuthGuard>
+        </LanguageProvider>
       </body>
     </html>
   );
